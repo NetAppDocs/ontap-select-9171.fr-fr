@@ -1,0 +1,141 @@
+---
+sidebar: sidebar 
+permalink: concept_perf_premium_ha_direct_ssd_96.html 
+keywords: ontap select, performance 
+summary: Informations sur les performances du stockage SSD à connexion directe HA premium ONTAP Select 9.6. 
+---
+= Performances ONTAP Select 9.6 : stockage SSD à connexion directe HA haut de gamme
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Informations sur les performances de la plateforme de référence.
+
+
+
+== Plateforme de référence
+
+Matériel ONTAP Select (Premium XL) (par nœud)
+
+* FUJITSU PRIMERGY RX2540 M4 :
++
+** Processeur Intel(R) Xeon(R) Gold 6142b à 2,6 GHz
+** 32 cœurs physiques (16 x 2 sockets), 64 cœurs logiques
+** 256 Go de RAM
+** Disques par hôte : 24 SSD de 960 Go
+** ESX 6.5U1
+
+
+
+
+Matériel client
+
+* 5 clients NFSv3 IBM 3550m4
+
+
+Informations de configuration
+
+* SW RAID 1 x 9 + 2 RAID-DP (11 disques)
+* 22+1 RAID-5 (RAID-0 dans ONTAP) / cache RAID NVRAM
+* Aucune fonctionnalité d'efficacité de stockage n'est utilisée (compression, déduplication, copies Snapshot, SnapMirror, etc.)
+
+
+Le tableau suivant répertorie le débit mesuré par rapport aux charges de travail en lecture/écriture sur une paire de nœuds ONTAP Select haute disponibilité (HA) utilisant à la fois le RAID logiciel et le RAID matériel. Les mesures de performances ont été réalisées à l'aide de l'outil de génération de charge SIO.
+
+
+NOTE: Ces chiffres de performances sont basés sur ONTAP Select 9.6.
+
+*Résultats de performances pour un cluster ONTAP Select à nœud unique (partie d'une instance moyenne à quatre nœuds) sur un SSD de stockage à connexion directe (DAS), avec RAID logiciel et RAID matériel*
+
+[cols="6*"]
+|===
+| Description | Lecture séquentielle 64 Ko | Écriture séquentielle 64 Ko | Lecture aléatoire 8 Ko | Écriture aléatoire 8 Ko | WR/RD aléatoire (50/50) 8 Ko 
+
+
+| ONTAP Select grande instance avec logiciel RAID DAS (SSD) | 2171 Mbit/s | 559 Mbit/s | 954 Mbit/s | 394 Mbit/s | 564 Mbit/s 
+
+
+| Instance moyenne ONTAP Select avec logiciel RAID DAS (SSD) | 2090 Mbit/s | 592 Mbit/s | 677 Mbit/s | 335 Mbit/s | 441 3 Mbit/s 
+
+
+| Instance moyenne ONTAP Select avec RAID matériel DAS (SSD) | 2038 Mbit/s | 520 Mbit/s | 578 Mbit/s | 325 Mbit/s | 399 Mbit/s 
+|===
+
+
+=== Lecture séquentielle de 64 K
+
+Détails:
+
+* E/S directes SIO activées
+* 2 nœuds
+* 2 cartes réseau de données par nœud
+* 1 x agrégat de données par nœud (RAID matériel 2 To), (RAID logiciel 8 To)
+* 64 processus SIO, 1 thread par processus
+* 32 volumes par nœud
+* 1 x fichiers par processus ; les fichiers font 12 000 Mo chacun
+
+
+
+
+=== Écriture séquentielle de 64 Ko
+
+Détails:
+
+* E/S directes SIO activées
+* 2 nœuds
+* 2 cartes d'interface réseau de données (NIC) par nœud
+* 1 x agrégat de données par nœud (RAID matériel 2 To), (RAID logiciel 4 To)
+* 128 processus SIO, 1 thread par processus
+* Volumes par nœud : 32 (RAID matériel), 16 (RAID logiciel)
+* 1 x fichiers par processus ; les fichiers font 30 720 Mo chacun
+
+
+
+
+=== Lecture aléatoire de 8 Ko
+
+Détails:
+
+* E/S directes SIO activées
+* 2 nœuds
+* 2 cartes réseau de données par nœud
+* 1 x agrégat de données par nœud (RAID matériel 2 To), (RAID logiciel 4 To)
+* 64 processus SIO, 8 threads par processus
+* Volumes par nœud : 32
+* 1 x fichiers par processus ; les fichiers font 12 228 Mo chacun
+
+
+
+
+=== Écriture aléatoire de 8 Ko
+
+Détails:
+
+* E/S directes SIO activées
+* 2 nœuds
+* 2 cartes réseau de données par nœud
+* 1 x agrégat de données par nœud (RAID matériel 2 To), (RAID logiciel 4 To)
+* 64 processus SIO, 8 threads par processus
+* Volumes par nœud : 32
+* 1 x fichiers par processus ; les fichiers font 8 192 Mo chacun
+
+
+
+
+=== 8K aléatoire 50% écriture 50% lecture
+
+Détails:
+
+* E/S directes SIO activées
+* 2 nœuds
+* 2 cartes réseau de données par nœud
+* 1 x agrégat de données par nœud (RAID matériel 2 To), (RAID logiciel 4 To)
+* 64 SIO proc208 threads par proc
+* Volumes par nœud : 32
+* 1 x fichiers par processus ; les fichiers font 12 228 Mo chacun
+

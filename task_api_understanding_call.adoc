@@ -1,0 +1,28 @@
+---
+sidebar: sidebar 
+permalink: task_api_understanding_call.html 
+keywords: rest api, deploy rest api, rest, understanding, executing 
+summary: 'Les détails de tous les appels d"API sont documentés et affichés dans un format commun sur la page de documentation en ligne ONTAP Select Deploy. Comprendre un appel d"API permet d"accéder aux détails de tous les appels d"API et de les interpréter.' 
+---
+= Comprendre et exécuter un appel d'API ONTAP Select Deploy
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Les détails de tous les appels d'API sont documentés et affichés dans un format commun sur la page de documentation en ligne ONTAP Select Deploy. Comprendre un appel d'API permet d'accéder aux détails de tous les appels d'API et de les interpréter.
+
+.Avant de commencer
+Vous devez être connecté à la page de documentation en ligne ONTAP Select Deploy. L'identifiant unique de votre cluster ONTAP Select doit avoir été attribué lors de sa création.
+
+.À propos de cette tâche
+Vous pouvez récupérer les informations de configuration décrivant un cluster ONTAP Select grâce à son identifiant unique. Dans cet exemple, tous les champs classés comme peu coûteux sont renvoyés. Cependant, il est recommandé de ne demander que les champs spécifiques nécessaires.
+
+.Étapes
+. Sur la page principale, faites défiler vers le bas et cliquez sur *Cluster*.
+. Cliquez sur *GET /clusters/{cluster_id}* pour afficher les détails de l'appel d'API utilisé pour renvoyer des informations sur un cluster ONTAP Select .
+

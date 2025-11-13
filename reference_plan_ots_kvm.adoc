@@ -1,0 +1,43 @@
+---
+sidebar: sidebar 
+permalink: reference_plan_ots_kvm.html 
+keywords: plan, planning, vnas, kvm 
+summary: Il existe plusieurs problèmes de planification liés à l’utilisation de l’hyperviseur KVM que vous devez prendre en compte. 
+---
+= Exigences ONTAP Select KVM
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Vous pouvez configurer ONTAP Select sur l'hyperviseur KVM avec une baie de stockage externe.
+
+
+
+== Exigences et restrictions de base
+
+Si vous utilisez une baie externe pour les pools de stockage ONTAP Select , les restrictions de configuration suivantes s'appliquent :
+
+* Vous devez définir le type de pool logique à l'aide de CLVM.
+* Vous devez fournir une limite de capacité de stockage.
+* La configuration prend uniquement en charge les protocoles FC, Fibre Channel over Ethernet (FCoE) et iSCSI.
+* La configuration ne reconnaît pas le stockage à provisionnement fin.
+
+
+
+CAUTION: La capacité de stockage spécifiée doit être conforme aux limites autorisées du stockage externe. Une erreur se produit si vous ne spécifiez pas de limite de capacité ou si le stockage externe manque d'espace lors de la création du disque.
+
+
+
+== Meilleures pratiques
+
+Vous devez respecter les recommandations suivantes :
+
+* Définir des ports réseau dédiés, une bande passante et des configurations vSwitch pour les réseaux ONTAP Select et le stockage externe
+* Configurez l'option de capacité pour restreindre l'utilisation du stockage (ONTAP Select ne peut pas consommer la totalité de la capacité d'un pool de stockage externe)
+* Vérifiez que toutes les baies de stockage externes utilisent les fonctionnalités de redondance et de haute disponibilité (HA) disponibles lorsque cela est possible
+

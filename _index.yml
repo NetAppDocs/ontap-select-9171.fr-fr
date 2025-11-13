@@ -1,0 +1,45 @@
+---
+indexpage:
+  title: Documentation ONTAP Select
+  lead: NetApp ONTAP Select est une appliance de stockage logicielle (SSD) déployable
+    sur divers serveurs matériels standard exécutant VMware ESXi ou l'hyperviseur
+    KVM (Kernel-based Virtual Machine). Elle offre l'agilité nécessaire pour créer
+    une infrastructure de cloud privé flexible et évolutive. Ce site contient la documentation
+    d' ONTAP Select 9.17.1.
+  tiles:
+  - title: Commencer
+    links:
+    - title: Notes de version
+      url: https://library.netapp.com/ecm/ecm_download_file/ECMLP3351669
+    - title: Quoi de neuf
+      url: "/reference_new_ots.html"
+    - title: En savoir plus sur ONTAP Select
+      url: "/concept_ots_overview.html"
+    - title: Licences
+      url: "/concept_lic_production.html"
+    - title: FAQ
+      url: "/reference_faq.html"
+  - title: Installer et gérer
+    links:
+    - title: Planifiez votre déploiement
+      url: "/concept_workflow_deploy.html"
+    - title: Installation
+      url: "/task_install_deploy.html"
+    - title: Gérez vos clusters
+      url: "/concept_adm_before.html"
+    - title: Utiliser l'API REST
+      url: "/concept_api_how_access.html"
+    - title: Déployer une instance d'évaluation de 90 jours d'un cluster
+      url: "/deploy-evaluation-ontap-select-ovf-template.html"
+  - title: Plus de ressources
+    links:
+    - title: Bibliothèque de produits ONTAP Select
+      url: https://mysupport.netapp.com/documentation/productlibrary/index.html?productID=62293
+    - title: Documentation ONTAP 9
+      url: https://docs.netapp.com/us-en/ontap/
+    - title: Blogues ONTAP Select
+      url: https://blog.netapp.com/tag/ontap-select/
+    - title: Communauté ONTAP Select
+      url: https://community.netapp.com/t5/forums/filteredbylabelpage/board-id/data-ontap-discussions/label-name/ontap%20select
+    - title: Matrice d'interopérabilité
+      url: https://mysupport.netapp.com/matrix/

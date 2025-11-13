@@ -1,0 +1,32 @@
+---
+sidebar: sidebar 
+permalink: task_adm_mediators.html 
+keywords: administer, administering, web, mediators 
+summary: Chaque cluster à deux nœuds ONTAP Select est surveillé par le service médiateur, qui aide à gérer la capacité HA partagée par les nœuds. 
+---
+= Administrer les services de médiateur ONTAP Select Deploy
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Chaque cluster à deux nœuds ONTAP Select est surveillé par le service médiateur, qui aide à gérer la capacité HA partagée par les nœuds.
+
+
+
+== Consulter l'état du service de médiation
+
+Vous pouvez afficher l'état du service médiateur par rapport à chacun des clusters à deux nœuds définis dans l'utilitaire ONTAP Select Deploy.
+
+.À propos de cette tâche
+Vous pouvez consulter la configuration de chaque médiateur, notamment son état actuel, les deux nœuds ONTAP Select et la cible iSCSI où sont stockées les informations de contrôle HA. Survolez les objets sur la page pour afficher des informations détaillées.
+
+.Étapes
+. Sign in à l’interface utilisateur Web de l’utilitaire de déploiement à l’aide du compte administrateur.
+. Cliquez sur l'onglet *Administration* en haut de la page et cliquez sur *Médiateurs*.
+. Cliquez éventuellement sur *Filtre* pour personnaliser votre vue des clusters à deux nœuds surveillés par le service médiateur.
+

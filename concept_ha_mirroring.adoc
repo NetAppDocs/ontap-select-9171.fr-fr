@@ -1,0 +1,84 @@
+---
+sidebar: sidebar 
+permalink: concept_ha_mirroring.html 
+keywords: ontap select, ha, high availability, synchronous replication, mirrored aggregates, write path, raid syncmirror, rsm 
+summary: 'Empêchez la perte de données à l’aide de RAID SyncMirror (RSM), des agrégats en miroir et du chemin d’écriture.' 
+---
+= ONTAP Select HA RSM et agrégats en miroir
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Empêchez la perte de données à l’aide de RAID SyncMirror (RSM), des agrégats en miroir et du chemin d’écriture.
+
+
+
+== Réplication synchrone
+
+Le modèle ONTAP HA repose sur le concept de partenaires HA. ONTAP Select étend cette architecture aux serveurs standard non partagés en utilisant la fonctionnalité RAID SyncMirror (RSM) présente dans ONTAP pour répliquer les blocs de données entre les nœuds du cluster, fournissant ainsi deux copies des données utilisateur réparties sur une paire HA.
+
+Un cluster à deux nœuds avec médiateur peut couvrir deux centres de données. Pour plus d'informations, consultez la sectionlink:reference_plan_best_practices.html#two-node-stretched-ha-metrocluster-sds-best-practices["Bonnes pratiques pour la haute disponibilité étendue à deux nœuds (MetroCluster SDS)"] .
+
+
+
+== Agrégats en miroir
+
+Un cluster ONTAP Select est composé de deux à huit nœuds. Chaque paire HA contient deux copies des données utilisateur, mises en miroir de manière synchrone entre les nœuds via un réseau IP. Cette mise en miroir est transparente pour l'utilisateur et constitue une propriété de l'agrégat de données, configurée automatiquement lors de sa création.
+
+Tous les agrégats d'un cluster ONTAP Select doivent être mis en miroir pour garantir la disponibilité des données en cas de basculement d'un nœud et éviter un SPOF en cas de panne matérielle. Les agrégats d'un cluster ONTAP Select sont créés à partir de disques virtuels fournis par chaque nœud de la paire HA et utilisent les disques suivants :
+
+* Un ensemble local de disques (fourni par le nœud ONTAP Select actuel)
+* Un ensemble de disques en miroir (fourni par le partenaire HA du nœud actuel)
+
+
+
+NOTE: Les disques locaux et miroirs utilisés pour créer un agrégat en miroir doivent être de même taille. Ces agrégats sont appelés plex 0 et plex 1 (pour indiquer respectivement les paires de miroirs locaux et distants). Les numéros de plex réels peuvent être différents dans votre installation.
+
+Cette approche est fondamentalement différente du fonctionnement des clusters ONTAP standard. Elle s'applique à tous les disques racine et de données du cluster ONTAP Select . L'agrégat contient des copies locales et miroir des données. Par conséquent, un agrégat contenant N disques virtuels offre un stockage unique équivalent à N/2 disques, car la seconde copie des données réside sur ses propres disques.
+
+La figure suivante illustre une paire HA au sein d'un cluster ONTAP Select à quatre nœuds. Ce cluster contient un agrégat unique (test) qui utilise le stockage des deux partenaires HA. Cet agrégat de données est composé de deux ensembles de disques virtuels : un ensemble local, fourni par le nœud de cluster propriétaire d' ONTAP Select (Plex 0), et un ensemble distant, fourni par le partenaire de basculement (Plex 1).
+
+Le Plex 0 est le compartiment qui contient tous les disques locaux. Le Plex 1 est le compartiment qui contient les disques miroirs, c'est-à-dire les disques chargés de stocker une seconde copie répliquée des données utilisateur. Le nœud propriétaire de l'agrégat fournit des disques au Plex 0, et le partenaire HA de ce nœud fournit des disques au Plex 1.
+
+Dans la figure suivante, un agrégat en miroir avec deux disques est utilisé. Son contenu est mis en miroir sur nos deux nœuds de cluster : le disque local NET-1.1 est placé dans le compartiment Plex 0 et le disque distant NET-2.1 dans le compartiment Plex 1. Dans cet exemple, le test d'agrégat appartient au nœud de cluster de gauche et utilise le disque local NET-1.1 et le disque miroir partenaire HA NET-2.1.
+
+* ONTAP Select agrégat miroir *image:DDHA_03.jpg["ONTAP Select agrégat en miroir"]
+
+
+NOTE: Lors du déploiement d'un cluster ONTAP Select , tous les disques virtuels présents sur le système sont automatiquement attribués au plex approprié, sans intervention supplémentaire de l'utilisateur. Cela évite l'attribution accidentelle de disques à un plex incorrect et assure une configuration optimale des disques miroirs.
+
+
+
+== Chemin d'écriture
+
+La mise en miroir synchrone des blocs de données entre les nœuds du cluster et l'obligation d'éviter toute perte de données en cas de panne système ont un impact significatif sur le chemin emprunté par une écriture entrante lors de sa propagation dans un cluster ONTAP Select . Ce processus se déroule en deux étapes :
+
+* Reconnaissance
+* Démantèlement
+
+
+Les écritures sur un volume cible s'effectuent via une LIF de données et sont validées sur la partition NVRAM virtualisée, présente sur un disque système du nœud ONTAP Select , avant d'être confirmées au client. Dans une configuration haute disponibilité, une étape supplémentaire est nécessaire : ces écritures NVRAM sont immédiatement mises en miroir sur le partenaire haute disponibilité du propriétaire du volume cible avant d'être confirmées. Ce processus garantit la cohérence du système de fichiers sur le nœud partenaire haute disponibilité en cas de panne matérielle sur le nœud d'origine.
+
+Une fois l'écriture validée dans la NVRAM, ONTAP déplace périodiquement le contenu de cette partition vers le disque virtuel approprié, un processus appelé désactivation. Ce processus n'a lieu qu'une seule fois, sur le nœud de cluster propriétaire du volume cible, et non sur le partenaire haute disponibilité.
+
+La figure suivante montre le chemin d’écriture d’une demande d’écriture entrante vers un nœud ONTAP Select .
+
+* Flux de travail de ONTAP Select *image:DDHA_04.jpg["Flux de travail de ONTAP Select"]
+
+L'accusé de réception d'écriture entrant comprend les étapes suivantes :
+
+* Les écritures entrent dans le système via une interface logique appartenant au nœud ONTAP Select A.
+* Les écritures sont validées dans la NVRAM du nœud A et mises en miroir sur le partenaire HA, le nœud B.
+* Une fois la demande d'E/S présente sur les deux nœuds HA, la demande est ensuite confirmée au client.
+
+
+La désactivation de ONTAP Select de la NVRAM vers l'agrégat de données (ONTAP CP) comprend les étapes suivantes :
+
+* Les écritures sont transférées de la NVRAM virtuelle vers l'agrégat de données virtuelles.
+* Le moteur miroir réplique de manière synchrone les blocs sur les deux plex.
+

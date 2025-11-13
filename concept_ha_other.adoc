@@ -1,0 +1,73 @@
+---
+sidebar: sidebar 
+permalink: concept_ha_other.html 
+keywords: ontap select, ha, high availability, disk heartbeating, heartbeating, mailbox, failover, giveback 
+summary: Le battement de cœur du disque HA, la boîte aux lettres HA, le battement de cœur HA, le basculement HA et le retour fonctionnent pour améliorer la protection des données. 
+---
+= ONTAP Select HA améliore la protection des données
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Le battement de cœur du disque haute disponibilité (HA), la boîte aux lettres HA, le battement de cœur HA, le basculement HA et le retour fonctionnent pour améliorer la protection des données.
+
+
+
+== Battement de cœur du disque
+
+Bien que l'architecture ONTAP Select HA exploite de nombreux chemins de code utilisés par les baies FAS traditionnelles, il existe des exceptions. L'une d'elles concerne l'implémentation du heartbeating basé sur le disque, une méthode de communication non réseau utilisée par les nœuds du cluster pour empêcher l'isolation du réseau d'entraîner un comportement de split-brain. Un scénario de split-brain résulte du partitionnement du cluster, généralement causé par des pannes réseau, où chaque côté croit que l'autre est en panne et tente de s'approprier les ressources du cluster.
+
+Les implémentations HA d'entreprise doivent gérer ce type de scénario avec élégance. ONTAP y parvient grâce à une méthode de pulsation personnalisée sur disque. Cette tâche incombe à la boîte aux lettres HA, un emplacement sur le stockage physique utilisé par les nœuds du cluster pour transmettre les pulsations. Cela permet au cluster de déterminer la connectivité et donc de définir le quorum en cas de basculement.
+
+Sur les baies FAS , qui utilisent une architecture HA de stockage partagé, ONTAP résout les problèmes de split-brain des manières suivantes :
+
+* Réservations persistantes SCSI
+* Métadonnées HA persistantes
+* État HA envoyé via l'interconnexion HA
+
+
+Cependant, dans l'architecture « shared-nothing » d'un cluster ONTAP Select , un nœud ne peut voir que son propre stockage local et non celui du partenaire HA. Par conséquent, lorsque le partitionnement réseau isole chaque côté d'une paire HA, les méthodes précédentes de détermination du quorum du cluster et du comportement de basculement ne sont pas disponibles.
+
+Bien que la méthode actuelle de détection et d'évitement du split-brain ne soit pas utilisable, une méthode de médiation, compatible avec les contraintes d'un environnement sans partage, reste nécessaire. ONTAP Select étend l'infrastructure de boîtes aux lettres existante en lui permettant d'agir comme méthode de médiation en cas de partitionnement du réseau. Le stockage partagé étant indisponible, la médiation s'effectue via l'accès aux disques de boîtes aux lettres via le NAS. Ces disques sont répartis dans le cluster, y compris le médiateur dans un cluster à deux nœuds, via le protocole iSCSI. Ainsi, des décisions de basculement intelligentes peuvent être prises par un nœud de cluster en fonction de l'accès à ces disques. Si un nœud peut accéder aux disques de boîtes aux lettres d'autres nœuds en dehors de son partenaire haute disponibilité, il est probablement opérationnel et en bon état.
+
+
+NOTE: L'architecture de la boîte aux lettres et la méthode de pulsation basée sur le disque pour résoudre les problèmes de quorum de cluster et de split-brain sont les raisons pour lesquelles la variante multinœud d' ONTAP Select nécessite soit quatre nœuds distincts, soit un médiateur pour un cluster à deux nœuds.
+
+
+
+== Publication dans la boîte aux lettres HA
+
+L'architecture de boîte aux lettres HA utilise un modèle de publication de messages. À intervalles réguliers, les nœuds du cluster envoient des messages à tous les autres disques de boîte aux lettres du cluster, y compris le médiateur, indiquant que le nœud est opérationnel. Dans un cluster sain, à tout moment, un seul disque de boîte aux lettres sur un nœud du cluster reçoit des messages de tous les autres nœuds du cluster.
+
+Un disque virtuel est attaché à chaque nœud du cluster Select, spécifiquement utilisé pour l'accès aux boîtes aux lettres partagées. Ce disque est appelé disque de boîte aux lettres médiateur, car sa fonction principale est de servir de méthode de médiation du cluster en cas de panne de nœud ou de partitionnement réseau. Ce disque contient des partitions pour chaque nœud du cluster et est monté sur un réseau iSCSI par d'autres nœuds du cluster Select. Ces nœuds publient régulièrement des états d'intégrité sur la partition correspondante du disque de boîte aux lettres. L'utilisation de disques de boîte aux lettres accessibles par le réseau, répartis sur l'ensemble du cluster, permet de déduire l'état de santé des nœuds grâce à une matrice d'accessibilité. Par exemple, les nœuds A et B du cluster peuvent publier des messages sur la boîte aux lettres du nœud D, mais pas sur celle du nœud C. De plus, le nœud D ne peut pas publier de messages sur la boîte aux lettres du nœud C ; il est donc probable que le nœud C soit en panne ou isolé du réseau et doive être pris en charge.
+
+
+
+== HA battements de cœur
+
+Comme avec les plateformes NetApp FAS , ONTAP Select envoie régulièrement des messages de pulsation HA via l'interconnexion HA. Au sein du cluster ONTAP Select , cette opération s'effectue via une connexion réseau TCP/IP entre les partenaires HA. De plus, les messages de pulsation sur disque sont transmis à tous les disques de boîtes aux lettres HA, y compris les disques de boîtes aux lettres médiatrices. Ces messages sont transmis toutes les quelques secondes et relus périodiquement. La fréquence d'envoi et de réception permet au cluster ONTAP Select de détecter les pannes HA en environ 15 secondes, soit le même délai que sur les plateformes FAS . Lorsque les messages de pulsation ne sont plus lus, un basculement est déclenché.
+
+La figure suivante montre le processus d'envoi et de réception de messages de pulsation sur les disques d'interconnexion et de médiateur HA du point de vue d'un seul nœud de cluster ONTAP Select , le nœud C.
+
+
+NOTE: Les pulsations du réseau sont envoyées via l'interconnexion HA au partenaire HA, le nœud D, tandis que les pulsations du disque utilisent des disques de boîte aux lettres sur tous les nœuds du cluster, A, B, C et D.
+
+*Battements cardiaques HA dans un cluster à quatre nœuds : état stable*image:DDHA_05.jpg["Battements de cœur HA dans un cluster à quatre nœuds : état stable"]
+
+
+
+== Basculement et retour HA
+
+Lors d'un basculement, le nœud survivant assume les responsabilités de service de données pour son nœud homologue en utilisant la copie locale des données de son partenaire HA. Les E/S client peuvent se poursuivre sans interruption, mais les modifications apportées à ces données doivent être répliquées avant la restitution. Notez qu'ONTAP ONTAP Select ne prend pas en charge la restitution forcée, car cela entraîne la perte des modifications stockées sur le nœud survivant.
+
+La synchronisation est automatiquement déclenchée lorsque le nœud redémarré rejoint le cluster. Le temps nécessaire à la synchronisation dépend de plusieurs facteurs, notamment le nombre de modifications à répliquer, la latence réseau entre les nœuds et la vitesse des sous-systèmes de disque sur chaque nœud. Il est possible que le temps nécessaire à la synchronisation dépasse la fenêtre de retour automatique de 10 minutes. Dans ce cas, une synchronisation manuelle est nécessaire après la synchronisation. La progression de la synchronisation peut être surveillée à l'aide de la commande suivante :
+
+[listing]
+----
+storage aggregate status -r -aggregate <aggregate name>
+----

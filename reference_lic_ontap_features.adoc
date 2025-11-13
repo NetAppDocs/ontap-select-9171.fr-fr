@@ -1,0 +1,73 @@
+---
+sidebar: sidebar 
+permalink: reference_lic_ontap_features.html 
+keywords: license, licensing, ontap features, default ontap features 
+summary: 'ONTAP Select offre une prise en charge complète de la plupart des fonctionnalités ONTAP . De nombreuses fonctionnalités ONTAP sont automatiquement concédées sous licence pour chaque nœud lors du déploiement d"un cluster. Cependant, certaines fonctionnalités nécessitent une licence distincte.' 
+---
+= Prise en ONTAP Select pour les fonctionnalités ONTAP
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+ONTAP Select prend en charge la plupart des fonctionnalités ONTAP . De nombreuses fonctionnalités ONTAP sont automatiquement concédées sous licence pour chaque nœud lors du déploiement d'un cluster. Cependant, certaines fonctionnalités nécessitent une licence distincte.
+
+
+NOTE: Les fonctionnalités ONTAP qui ont des dépendances spécifiques au matériel ne sont généralement pas prises en charge avec ONTAP Select.
+
+
+
+== Fonctionnalités ONTAP activées automatiquement par défaut
+
+Les fonctionnalités ONTAP suivantes sont prises en charge avec ONTAP Select et sous licence par défaut :
+
+* Protection autonome contre les ransomwares (ARP) (mises à jour manuelles)
+* CIFS
+* Déduplication et compression
+* FlexCache
+* FlexClone
+* iSCSI
+* NDMP
+* Chiffrement de volume NetApp (pays non restreints uniquement)
+* NFS
+* NVMe sur TCP
+* Capacité multi-locataire ONTAP
+* ONTAP S3
+* S3 SnapMirror
+* SnapMirror
+* Nuage SnapMirror
+* SnapRestore
+* SnapVault
+* Reprise après sinistre des machines virtuelles de stockage (SVM DR)
++
+
+NOTE: ONTAP Select prend en charge SVM DR comme source et destination, avec un maximum de 16 relations. La prise en charge de SVM DR est limitée à l'utilisation de la version source ONTAP jusqu'aux versions +2. Par exemple, la source ONTAP Select 9.12.1 peut se connecter aux versions ONTAP de destination 9.12.1, 9.13.1 ou 9.14.1.
+
+
+
+
+
+== Fonctionnalités ONTAP sous licence séparée
+
+Vous devez acquérir une licence distincte pour toute fonctionnalité ONTAP qui n'est pas activée par défaut, notamment :
+
+* FabricPool
+* MetroCluster SDS (offre de licence premium ONTAP Select )
+
+
+[NOTE]
+====
+* Pour ONTAP Select 9.16.1 et versions antérieures, SnapLock Select Enterprise (incluant le verrouillage inviolable des instantanés) est disponible auprès delink:https://mysupport.netapp.com/site/["Site de support NetApp"^] .
+* La SnapLock Compliance n'est pas prise en charge pour ONTAP Select.
+* Vous n’avez pas besoin d’une licence FabricPool lorsque vous utilisez StorageGRID.
+
+
+====
+.Informations connexes
+* link:concept_ots_overview.html#compare-ontap-select-and-ontap-9["Comparaison ONTAP Select et d' ONTAP 9"]
+* link:https://mysupport.netapp.com/site/systems/master-license-keys["Clés de licence principales NetApp ONTAP"^]
+

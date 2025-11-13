@@ -1,0 +1,125 @@
+---
+sidebar: sidebar 
+permalink: concept_stor_eff_support.html 
+keywords: ontap select, storage efficiency support 
+summary: 'ONTAP Select offre des options d"efficacité de stockage similaires à celles des baies FAS et AFF .' 
+---
+= Prise en charge de l'efficacité du stockage ONTAP Select
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+ONTAP Select offre des options d'efficacité de stockage similaires à celles des baies FAS et AFF .
+
+Les déploiements de NAS virtuels (vNAS) ONTAP Select utilisant des baies VSAN entièrement flash ou flash génériques doivent suivre les meilleures pratiques pour ONTAP Select avec un stockage à connexion directe (DAS) non SSD.
+
+Une personnalité de type AFF est automatiquement activée sur les nouvelles installations tant que vous disposez d'un stockage DAS avec des disques SSD et d'une licence premium.
+
+Avec une personnalité de type AFF, les fonctionnalités SE en ligne suivantes sont automatiquement activées lors de l'installation :
+
+* Détection de motif zéro en ligne
+* Déduplication en ligne du volume
+* Déduplication d'arrière-plan du volume
+* Compression adaptative en ligne
+* Compactage des données en ligne
+* Déduplication agrégée en ligne
+* Déduplication d'arrière-plan agrégée
+
+
+Pour vérifier qu'ONTAP ONTAP Select a activé toutes les stratégies d'efficacité de stockage par défaut, exécutez la commande suivante sur un volume nouvellement créé :
+
+[listing]
+----
+<system name>::> set diag
+Warning: These diagnostic commands are for use by NetApp personnel only.
+Do you want to continue? {y|n}: y
+twonode95IP15::*> sis config
+Vserver:                                SVM1
+Volume:                                 _export1_NFS_volume
+Schedule                                -
+Policy:                                 auto
+Compression:                            true
+Inline Compression:                     true
+Compression Type:                       adaptive
+Application IO Si                       8K
+Compression Algorithm:                  lzopro
+Inline Dedupe:                          true
+Data Compaction:                        true
+Cross Volume Inline Deduplication:      true
+Cross Volume Background Deduplication:  true
+----
+
+NOTE: Pour les mises à niveau ONTAP Select à partir de la version 9.6, vous devez installer ONTAP Select sur un stockage SSD DAS avec une licence premium. De plus, vous devez cocher la case « Activer l'efficacité du stockage » lors de l'installation initiale du cluster avec ONTAP Deploy. L'activation d'une personnalité de type AFF après la mise à niveau ONTAP lorsque les conditions préalables ne sont pas remplies nécessite la création manuelle d'un argument de démarrage et le redémarrage du nœud. Contactez le support technique pour plus d'informations.
+
+.Configurations d'efficacité de stockage ONTAP Select
+Le tableau suivant résume les différentes options d'efficacité de stockage disponibles, activées par défaut ou non activées par défaut mais recommandées, selon le type de support et la licence du logiciel.
+
+[cols="4"]
+|===
+| Fonctionnalités ONTAP Select | SSD DAS (premium ou premium XL^1^) | Disque dur DAS (toutes licences) | vNAS (toutes licences) 
+
+
+| Détection du zéro en ligne | Oui (par défaut) | Oui Activé par l'utilisateur sur une base par volume | Oui Activé par l'utilisateur sur une base par volume 
+
+
+| Déduplication en ligne du volume | Oui (par défaut) | Non disponible | Non pris en charge 
+
+
+| Compression en ligne 32K (compression secondaire) | Oui Activé par l'utilisateur en fonction du volume. | Oui Activé par l'utilisateur sur une base par volume | Non pris en charge 
+
+
+| Compression en ligne 8K (compression adaptative) | Oui (par défaut) | Oui Activé par l'utilisateur sur une base par volume | Non pris en charge 
+
+
+| Compression d'arrière-plan | Non pris en charge | Oui Activé par l'utilisateur sur une base par volume | Oui Activé par l'utilisateur sur une base par volume 
+
+
+| Scanner de compression | Oui | Oui | Oui Activé par l'utilisateur sur une base par volume 
+
+
+| Compactage des données en ligne | Oui (par défaut) | Oui Activé par l'utilisateur sur une base par volume | Non pris en charge 
+
+
+| Scanner de compactage | Oui | Oui | Non pris en charge 
+
+
+| Déduplication agrégée en ligne | Oui (par défaut) | S/O | Non pris en charge 
+
+
+| Déduplication d'arrière-plan du volume | Oui (par défaut) | Oui Activé par l'utilisateur sur une base par volume | Oui Activé par l'utilisateur sur une base par volume 
+
+
+| Déduplication d'arrière-plan agrégée | Oui (par défaut) | S/O | Non pris en charge 
+|===
+[small]#^1^ ONTAP Select 9.6 prend en charge une nouvelle licence (Premium XL) et une nouvelle taille de machine virtuelle (Large). Cependant, la grande machine virtuelle n'est prise en charge que pour les configurations DAS utilisant le RAID logiciel. Les configurations RAID matériel et vNAS ne sont pas prises en charge avec la grande machine virtuelle ONTAP Select de la version 9.6.#
+
+.Remarques sur le comportement de mise à niveau pour les configurations SSD DAS
+Après la mise à niveau vers ONTAP Select 9.6 ou une version ultérieure, veuillez patienter jusqu'à ce que… `system node upgrade-revert show` commande permettant d'indiquer que la mise à niveau est terminée avant de vérifier les valeurs d'efficacité de stockage pour les volumes existants.
+
+Sur un système mis à niveau vers ONTAP Select 9.6 ou version ultérieure, un nouveau volume créé sur un agrégat existant ou nouvellement créé présente le même comportement qu'un volume créé lors d'un nouveau déploiement. Les volumes existants mis à niveau vers ONTAP Select appliquent la plupart des mêmes politiques d'efficacité de stockage qu'un volume nouvellement créé, avec quelques variations :
+
+Scénario 1:: Si aucune politique d’efficacité du stockage n’a été activée sur un volume avant la mise à niveau, alors :
++
+--
+* Volumes avec `space guarantee = volume` Les fonctions de compactage des données en ligne, de déduplication en ligne agrégée et de déduplication en arrière-plan agrégée ne sont pas activées. Ces options peuvent être activées après la mise à niveau.
+* Volumes avec `space guarantee = none` La compression en arrière-plan n'est pas activée. Cette option peut être activée après la mise à niveau.
+* La politique d'efficacité du stockage sur les volumes existants est définie sur automatique après la mise à niveau.
+
+
+--
+Scénario 2:: Si certaines fonctionnalités de stockage sont déjà activées sur un volume avant la mise à niveau, alors :
++
+--
+* Volumes avec `space guarantee = volume` Je ne vois aucune différence après la mise à jour.
+* Volumes avec `space guarantee = none` Activer la déduplication agrégée en arrière-plan.
+* Volumes avec `storage policy inline-only` ont configuré leur police d'assurance en mode automatique.
+* Les volumes dotés de politiques d'efficacité de stockage définies par l'utilisateur ne subissent aucun changement de politique, à l'exception des volumes avec `space guarantee = none` . Ces volumes ont une déduplication d'arrière-plan agrégée activée.
+
+
+--
+

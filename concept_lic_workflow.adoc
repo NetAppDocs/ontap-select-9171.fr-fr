@@ -1,0 +1,29 @@
+---
+sidebar: sidebar 
+permalink: concept_lic_workflow.html 
+keywords: license, licensing, purchase, purchasing, workflow 
+summary: Vous pouvez suivre un flux de travail pour acheter et appliquer une licence pour votre déploiement ONTAP Select . 
+---
+= Flux de travail lors de l'achat d'une licence ONTAP Select
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Le workflow suivant illustre le processus d'achat et d'application d'une licence pour votre déploiement ONTAP Select . Lors de l'achat d'une licence, vous devez sélectionner le modèle de licence et la capacité de stockage.
+
+Le processus exact varie selon que vous utilisez une licence Capacity Tier ou Capacity Pool :
+
+Numéro de série de licence à neuf chiffres:: Le numéro de série s'applique soit à un nœud (niveaux de capacité), soit à un pool de stockage (pools de capacité).
+ID de verrouillage de licence:: Vous devez disposer de l'ID de verrouillage de licence pour votre instance de déploiement lorsque vous utilisez une licence Capacity Pool.
+Site Web de licences:: Vous obtenez une licence Capacity Tier et Capacity Pool sur différents sites Web
+
+
+image:purchased_license_workflow.png["Décrit le processus utilisé pour acheter et installer une licence de stockage pour un déploiement de production ONTAP Select ."]
+
+.Informations connexes
+link:task_adm_licenses.html["Licences ONTAP Select"]

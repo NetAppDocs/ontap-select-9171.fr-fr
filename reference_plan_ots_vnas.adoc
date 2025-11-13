@@ -1,0 +1,61 @@
+---
+sidebar: sidebar 
+permalink: reference_plan_ots_vnas.html 
+keywords: plan, planning, vnas, vmware esxi, 
+summary: Il existe plusieurs problèmes de planification liés à l’utilisation de VMware ESXi que vous devez prendre en compte. 
+---
+= Configuration requise ONTAP Select VMware ESXi
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+ONTAP Select vNAS est une solution permettant aux magasins de données ONTAP Select d'être externes à l'hôte hyperviseur ESXi sur lequel la machine virtuelle ONTAP Select est exécutée. Ces magasins de données distants sont accessibles via VMware vSAN ou une baie de stockage externe générique.
+
+
+
+== Exigences et restrictions de base
+
+La solution vNAS ONTAP Select peut être utilisée avec un cluster ONTAP Select de n'importe quelle taille.
+
+Tous les composants de stockage associés, y compris le matériel, les logiciels et les fonctionnalités requises, doivent respecter les exigences décrites dans lelink:https://mysupport.netapp.com/matrix/["Outil de matrice d'interopérabilité"^] . ONTAP Select prend en charge toutes les baies de stockage externes décrites dans la documentation de compatibilité VMware Storage/SAN, notamment iSCSI, NAS (NFSv3), Fibre Channel et Fibre Channel sur Ethernet. La prise en charge des baies externes est limitée par la version ESXi prise en charge par ONTAP Select.
+
+Les fonctionnalités VMware suivantes sont prises en charge lors du déploiement d'un cluster avec ONTAP Select vNAS :
+
+* VMotion
+* Haute disponibilité (HA)
+* Planificateur de ressources distribuées (DRS)
+
+
+
+NOTE: Ces fonctionnalités VMware sont prises en charge avec les clusters ONTAP Select mono-nœuds et multi-nœuds. Lors du déploiement d'un cluster multi-nœuds, assurez-vous que deux nœuds ou plus du même cluster ne s'exécutent pas sur le même hôte hyperviseur.
+
+Les fonctionnalités VMware suivantes ne sont pas prises en charge :
+
+* Tolérance aux pannes (FT)
+* Magasin de données virtuel (VVOL)
+
+
+
+
+== Exigences de configuration
+
+Si vous prévoyez d'utiliser une banque de données VMFS sur une baie de stockage externe (iSCSI, Fibre Channel, Fibre Channel sur Ethernet), vous devez créer un pool de stockage VMFS avant de configurer ONTAP Select pour utiliser le stockage. Si vous utilisez une banque de données NFS, il n'est pas nécessaire de créer une banque de données VMFS distincte. Toutes les banques de données vSAN doivent être définies dans le même cluster ESXi.
+
+
+CAUTION: Vous devez définir une limite de capacité pour chaque banque de données sur VMware vSAN ou une baie de stockage externe lors de la configuration d'un hôte ou de l'ajout d'un stockage. La capacité spécifiée doit être comprise dans les limites de stockage autorisées du stockage externe. Une erreur se produira si vous ne définissez pas de limite de capacité ou si le stockage externe manque d'espace lors de la création du disque.
+
+
+
+== Meilleures pratiques
+
+Consultez la documentation VMware disponible et respectez les bonnes pratiques applicables aux hôtes ESXi. De plus :
+
+* Définir des ports réseau dédiés, une bande passante et des configurations vSwitch pour les réseaux ONTAP Select et le stockage externe (VMware vSAN et trafic de baie de stockage générique lors de l'utilisation d'iSCSI ou de NFS)
+* Configurez l'option de capacité pour restreindre l'utilisation du stockage (ONTAP Select ne peut pas consommer la totalité de la capacité d'une banque de données vNAS externe)
+* Assurez-vous que toutes les baies de stockage externes génériques utilisent les fonctionnalités de redondance et de haute disponibilité disponibles lorsque cela est possible
+

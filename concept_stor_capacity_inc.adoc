@@ -1,0 +1,71 @@
+---
+sidebar: sidebar 
+permalink: concept_stor_capacity_inc.html 
+keywords: ontap select, deploy, increase storage 
+summary: 'ONTAP Deploy peut être utilisé pour ajouter et octroyer une licence de stockage supplémentaire pour chaque nœud d"un cluster ONTAP Select .' 
+---
+= Augmenter la capacité de stockage ONTAP Select
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+ONTAP Deploy peut être utilisé pour ajouter et octroyer une licence de stockage supplémentaire pour chaque nœud d'un cluster ONTAP Select .
+
+La fonctionnalité d'ajout de stockage dans ONTAP Deploy est le seul moyen d'augmenter la capacité de stockage gérée. La modification directe de la VM ONTAP Select n'est pas prise en charge. L'illustration suivante montre l'icône « + » qui lance l'assistant d'ajout de stockage.
+
+image:ST_05.jpg["Détails du cluster et du nœud"]
+
+Les considérations suivantes sont importantes pour la réussite de l'extension de capacité. L'ajout de capacité nécessite que la licence existante couvre la quantité totale d'espace (existant et nouveau). Une opération d'ajout de stockage entraînant un dépassement de la capacité autorisée du nœud échoue. Une nouvelle licence d'une capacité suffisante doit être installée en premier.
+
+Si la capacité supplémentaire est ajoutée à un agrégat ONTAP Select existant, le nouveau pool de stockage (datastore) doit présenter un profil de performances similaire à celui du pool de stockage existant. Notez qu'il est impossible d'ajouter du stockage non SSD à un nœud ONTAP Select installé avec une personnalité de type AFF(Flash activé). La combinaison de stockage DAS et de stockage externe n'est pas non plus prise en charge.
+
+Si un stockage local est ajouté à un système pour fournir des pools de stockage locaux (DAS) supplémentaires, vous devez créer un groupe RAID et un ou plusieurs LUN supplémentaires. Comme pour les systèmes FAS , veillez à ce que les performances du nouveau groupe RAID soient similaires à celles du groupe RAID d'origine si vous ajoutez de l'espace au même agrégat. Si vous créez un nouvel agrégat, la configuration du nouveau groupe RAID peut être différente si les implications en termes de performances sont bien comprises.
+
+Le nouvel espace peut être ajouté à ce même magasin de données en tant qu'extension si sa taille totale ne dépasse pas la taille maximale prise en charge. L'ajout d'une extension à un magasin de données sur lequel ONTAP Select est déjà installé peut être effectué dynamiquement et n'affecte pas le fonctionnement du nœud ONTAP Select .
+
+Si le nœud ONTAP Select fait partie d’une paire HA, certains problèmes supplémentaires doivent être pris en compte.
+
+Dans une paire HA, chaque nœud contient une copie miroir des données de son partenaire. L'ajout d'espace au nœud 1 nécessite l'ajout d'une quantité d'espace identique à son partenaire, le nœud 2, afin que toutes les données du nœud 1 soient répliquées sur le nœud 2. Autrement dit, l'espace ajouté au nœud 2 lors de l'opération d'ajout de capacité pour le nœud 1 n'est ni visible ni accessible sur le nœud 2. L'espace est ajouté au nœud 2 afin que les données du nœud 1 soient entièrement protégées lors d'un événement HA.
+
+Un autre point à prendre en compte concerne les performances. Les données du nœud 1 sont répliquées de manière synchrone vers le nœud 2. Par conséquent, les performances du nouvel espace (magasin de données) du nœud 1 doivent être identiques à celles du nouvel espace (magasin de données) du nœud 2. Autrement dit, l'ajout d'espace sur les deux nœuds, mais avec des technologies de disque ou des tailles de groupe RAID différentes, peut entraîner des problèmes de performances. Cela est dû à l'opération RAID SyncMirror utilisée pour conserver une copie des données sur le nœud partenaire.
+
+Pour augmenter la capacité accessible aux utilisateurs sur les deux nœuds d'une paire HA, deux ajouts de stockage doivent être effectués, un pour chaque nœud. Chaque ajout de stockage nécessite de l'espace supplémentaire sur les deux nœuds. L'espace total requis sur chaque nœud est égal à l'espace requis sur le nœud 1 plus l'espace requis sur le nœud 2.
+
+La configuration initiale comprend deux nœuds, chacun disposant de deux banques de données de 30 To chacune. ONTAP Deploy crée un cluster à deux nœuds, chaque nœud consommant 10 To d'espace de la banque de données 1. ONTAP Deploy configure chaque nœud avec 5 To d'espace actif par nœud.
+
+La figure suivante illustre les résultats d'une seule opération d'ajout de stockage pour le nœud 1. ONTAP Select utilise toujours la même quantité de stockage (15 To) sur chaque nœud. Cependant, le nœud 1 dispose de plus de stockage actif (10 To) que le nœud 2 (5 To). Les deux nœuds sont entièrement protégés, car chacun héberge une copie des données de l'autre. Il reste de l'espace libre dans le magasin de données 1, et le magasin de données 2 est toujours entièrement libre.
+
+*Répartition de la capacité : allocation et espace libre après une seule opération d'ajout de stockage*
+
+image:ST_06.jpg["Répartition de la capacité : allocation et espace libre après une seule opération d'ajout de stockage"]
+
+Deux opérations d'ajout de stockage supplémentaires sur le nœud 1 consomment le reste du datastore 1 et une partie du datastore 2 (en utilisant la capacité maximale). La première opération consomme les 15 To d'espace libre restant dans le datastore 1. La figure suivante illustre le résultat de la deuxième opération. À ce stade, le nœud 1 gère 50 To de données actives, tandis que le nœud 2 en gère les 5 To d'origine.
+
+*Répartition de la capacité : allocation et espace libre après deux opérations d'ajout de stockage supplémentaires pour le nœud 1*
+
+image:ST_07.jpg["Répartition de la capacité : allocation et espace libre après deux opérations d'ajout de stockage supplémentaires pour le nœud 1"]
+
+La taille maximale d'un VMDK utilisé lors des opérations d'ajout de capacité est de 16 To. La taille maximale d'un VMDK utilisé lors des opérations de création de cluster reste de 8 To. ONTAP Deploy crée des VMDK correctement dimensionnés en fonction de votre configuration (cluster à nœud unique ou multinœud) et de la capacité ajoutée. Cependant, la taille maximale de chaque VMDK ne doit pas dépasser 8 To lors des opérations de création de cluster et 16 To lors des opérations d'ajout de stockage.
+
+
+
+== Augmentez la capacité d' ONTAP Select avec le RAID logiciel
+
+L'assistant d'ajout de stockage peut également être utilisé pour augmenter la capacité gérée des nœuds ONTAP Select utilisant le RAID logiciel. L'assistant affiche uniquement les disques SDD DAS disponibles et mappés en tant que RDM sur la machine virtuelle ONTAP Select .
+
+Bien qu'il soit possible d'augmenter la capacité de la licence d'un seul To, avec un RAID logiciel, il est impossible d'augmenter physiquement la capacité d'un seul To. Comme pour l'ajout de disques à une matrice FAS ou AFF , certains facteurs déterminent la quantité minimale de stockage pouvant être ajoutée en une seule opération.
+
+Notez que dans une paire HA, l'ajout de stockage au nœud 1 nécessite qu'un nombre identique de disques soit également disponible sur la paire HA du nœud (nœud 2). Les disques locaux et les disques distants sont utilisés par une opération d'ajout de stockage sur le nœud 1. Autrement dit, les disques distants servent à garantir que le nouveau stockage du nœud 1 est répliqué et protégé sur le nœud 2. Pour ajouter du stockage utilisable localement sur le nœud 2, une opération d'ajout de stockage distincte et un nombre égal de disques distincts doivent être disponibles sur les deux nœuds.
+
+ONTAP Select partitionne tous les nouveaux disques dans les mêmes partitions racine, données et données que les disques existants. Le partitionnement a lieu lors de la création d'un nouvel agrégat ou de l'extension d'un agrégat existant. La taille de la bande de partition racine de chaque disque est définie pour correspondre à la taille de la partition racine existante sur les disques existants. Par conséquent, chacune des deux tailles de partition de données égales peut être calculée comme la capacité totale du disque moins la taille de la partition racine divisée par deux. La taille de la bande de partition racine est variable et est calculée lors de la configuration initiale du cluster comme suit : l'espace racine total requis (68 Go pour un cluster à nœud unique et 136 Go pour les paires HA) est divisé par le nombre initial de disques, moins les disques de secours et de parité. La taille de la bande de partition racine est maintenue constante sur tous les disques ajoutés au système.
+
+Si vous créez un nouvel agrégat, le nombre minimum de disques requis varie en fonction du type de RAID et du fait que le nœud ONTAP Select fait partie d'une paire HA.
+
+Si vous ajoutez du stockage à un agrégat existant, certaines considérations supplémentaires sont nécessaires. Il est possible d'ajouter des disques à un groupe RAID existant, à condition que celui-ci n'atteigne pas déjà sa limite maximale. Les bonnes pratiques FAS et AFF traditionnelles pour l'ajout de disques à des groupes RAID existants s'appliquent également, et la création d'un point chaud sur le nouveau disque peut poser problème. De plus, seuls des disques de tailles de partition de données égales ou supérieures peuvent être ajoutés à un groupe RAID existant. Comme expliqué précédemment, la taille de la partition de données diffère de la taille brute du disque. Si les partitions de données ajoutées sont plus grandes que les partitions existantes, les nouveaux disques sont dimensionnés correctement. Autrement dit, une partie de la capacité de chaque nouveau disque reste inutilisée.
+
+Il est également possible d'utiliser les nouveaux disques pour créer un nouveau groupe RAID au sein d'un agrégat existant. Dans ce cas, la taille du groupe RAID doit correspondre à celle du groupe RAID existant.

@@ -1,0 +1,71 @@
+---
+sidebar: sidebar 
+permalink: concept_ha_config.html 
+keywords: ontap select, high availability configurations, two-node ha, multi-node ha, mc sds 
+summary: Découvrez les options de haute disponibilité pour sélectionner la meilleure configuration HA pour votre environnement. 
+---
+= Configurations de haute disponibilité ONTAP Select
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Découvrez les options de haute disponibilité pour sélectionner la meilleure configuration HA pour votre environnement.
+
+Bien que les clients commencent à migrer leurs applications des appliances de stockage professionnelles vers des solutions logicielles fonctionnant sur du matériel standard, les attentes et les besoins en matière de résilience et de tolérance aux pannes restent inchangés. Une solution haute disponibilité avec un objectif de point de récupération zéro (RPO) protège le client contre la perte de données due à une défaillance de l'un des composants de l'infrastructure.
+
+Une grande partie du marché des SDS repose sur le concept de stockage sans partage, la réplication logicielle assurant la résilience des données en stockant plusieurs copies des données utilisateur sur différents silos de stockage. ONTAP Select s'appuie sur ce principe en utilisant les fonctionnalités de réplication synchrone (RAID SyncMirror) fournies par ONTAP pour stocker une copie supplémentaire des données utilisateur au sein du cluster. Cela se produit dans le cadre d'une paire HA. Chaque paire HA stocke deux copies des données utilisateur : une sur le stockage fourni par le nœud local et une sur le stockage fourni par le partenaire HA. Au sein d'un cluster ONTAP Select , la haute disponibilité et la réplication synchrone sont liées, et leurs fonctionnalités ne peuvent être ni dissociées ni utilisées indépendamment. Par conséquent, la fonctionnalité de réplication synchrone est uniquement disponible dans l'offre multinœud.
+
+
+NOTE: Dans un cluster ONTAP Select , la réplication synchrone est une fonction de l'implémentation HA, et non un remplacement des moteurs de réplication asynchrone SnapMirror ou SnapVault . La réplication synchrone ne peut pas être utilisée indépendamment de la haute disponibilité.
+
+Il existe deux modèles de déploiement ONTAP Select HA : les clusters multi-nœuds (quatre, six ou huit nœuds) et les clusters à deux nœuds. La principale caractéristique d'un cluster ONTAP Select à deux nœuds est l'utilisation d'un service de médiation externe pour résoudre les scénarios de split-brain. La machine virtuelle ONTAP Deploy sert de médiateur par défaut pour toutes les paires HA à deux nœuds qu'elle configure.
+
+Les deux architectures sont représentées dans les figures suivantes.
+
+*Cluster ONTAP Select à deux nœuds avec médiateur distant et utilisant un stockage local*
+
+image:DDHA_01.jpg["Cluster ONTAP Select à deux nœuds avec médiateur distant et utilisant un stockage local"]
+
+
+NOTE: Le cluster ONTAP Select à deux nœuds est composé d'une paire HA et d'un médiateur. Au sein de cette paire HA, les agrégats de données de chaque nœud du cluster sont mis en miroir de manière synchrone, évitant ainsi toute perte de données en cas de basculement.
+
+*Cluster ONTAP Select à quatre nœuds utilisant un stockage local*image:DDHA_02.jpg["Cluster ONTAP Select à quatre nœuds utilisant un stockage local"]
+
+* Le cluster ONTAP Select à quatre nœuds est composé de deux paires HA. Les clusters à six et huit nœuds sont composés respectivement de trois et quatre paires HA. Au sein de chaque paire HA, les agrégats de données de chaque nœud sont mis en miroir de manière synchrone, ce qui évite toute perte de données en cas de basculement.
+* Une seule instance ONTAP Select peut être présente sur un serveur physique lors de l'utilisation du stockage DAS. ONTAP Select nécessite un accès non partagé au contrôleur RAID local du système et est conçu pour gérer les disques connectés localement, ce qui serait impossible sans connectivité physique au stockage.
+
+
+
+
+== HA à deux nœuds contre HA à plusieurs nœuds
+
+Contrairement aux baies FAS , les nœuds ONTAP Select d'une paire HA communiquent exclusivement via le réseau IP. Cela signifie que le réseau IP constitue un point de défaillance unique (SPOF), et la protection contre les partitions réseau et les scénarios de « split-brain » devient un aspect important de la conception. Le cluster multinœud peut supporter les pannes d'un seul nœud, car le quorum du cluster peut être établi par les trois nœuds survivants ou plus. Le cluster à deux nœuds s'appuie sur le service médiateur hébergé par la machine virtuelle ONTAP Deploy pour obtenir le même résultat.
+
+Le trafic réseau de pulsation entre les nœuds ONTAP Select et le service médiateur ONTAP Deploy est minimal et résilient, de sorte que la machine virtuelle ONTAP Deploy peut être hébergée dans un centre de données différent de celui du cluster à deux nœuds ONTAP Select .
+
+
+NOTE: La machine virtuelle ONTAP Deploy devient partie intégrante d'un cluster à deux nœuds lorsqu'elle sert de médiateur pour ce cluster. Si le service de médiateur n'est pas disponible, le cluster à deux nœuds continue de fournir des données, mais les fonctionnalités de basculement de stockage du cluster ONTAP Select sont désactivées. Par conséquent, le service de médiateur ONTAP Deploy doit maintenir une communication constante avec chaque nœud ONTAP Select de la paire HA. Une bande passante minimale de 5 Mbit/s et une latence aller-retour maximale (RTT) de 125 ms sont requises pour assurer le bon fonctionnement du quorum du cluster.
+
+Si la machine virtuelle ONTAP Deploy servant de médiateur est temporairement ou potentiellement définitivement indisponible, une machine virtuelle ONTAP Deploy secondaire peut être utilisée pour restaurer le quorum du cluster à deux nœuds. Cela crée une configuration dans laquelle la nouvelle machine virtuelle ONTAP Deploy ne peut pas gérer les nœuds ONTAP Select , mais participe avec succès à l'algorithme de quorum du cluster. La communication entre les nœuds ONTAP Select et la machine virtuelle ONTAP Deploy s'effectue via le protocole iSCSI sur IPv4. L'adresse IP de gestion du nœud ONTAP Select est l'initiateur et celle de la machine virtuelle ONTAP Deploy est la cible. Par conséquent, il n'est pas possible de prendre en charge les adresses IPv6 pour les adresses IP de gestion des nœuds lors de la création d'un cluster à deux nœuds. Les disques de boîtes aux lettres hébergés par ONTAP Deploy sont automatiquement créés et masqués par les adresses IP de gestion des nœuds ONTAP Select appropriées lors de la création du cluster à deux nœuds. La configuration complète est effectuée automatiquement lors de l'installation, et aucune autre action administrative n'est requise. L'instance ONTAP Deploy créant le cluster est le médiateur par défaut pour ce cluster.
+
+Une action administrative est requise si l'emplacement d'origine du médiateur doit être modifié. Il est possible de récupérer le quorum d'un cluster même en cas de perte de la machine virtuelle ONTAP Deploy d'origine. Cependant, NetApp recommande de sauvegarder la base de données ONTAP Deploy après chaque instanciation d'un cluster à deux nœuds.
+
+
+
+== HA à deux nœuds contre HA étendu à deux nœuds (MetroCluster SDS)
+
+Il est possible d'étendre un cluster HA actif/actif à deux nœuds sur de plus grandes distances et de placer chaque nœud dans un centre de données différent. La seule différence entre un cluster à deux nœuds et un cluster étendu à deux nœuds (également appelé MetroCluster SDS) réside dans la distance de connectivité réseau entre les nœuds.
+
+Un cluster à deux nœuds est défini comme un cluster dont les deux nœuds sont situés dans le même centre de données, à une distance de 300 m. En général, les deux nœuds disposent de liaisons montantes vers le même commutateur réseau ou ensemble de commutateurs ISL (Interswitch Link).
+
+Un SDS MetroCluster à deux nœuds est défini comme un cluster dont les nœuds sont physiquement séparés (salles, bâtiments et centres de données différents) de plus de 300 m. De plus, les connexions montantes de chaque nœud sont connectées à des commutateurs réseau distincts. Le SDS MetroCluster ne nécessite pas de matériel dédié. Cependant, l'environnement doit respecter les exigences de latence (5 ms maximum pour le RTT et 5 ms pour la gigue, soit un total de 10 ms) et de distance physique (10 km maximum).
+
+MetroCluster SDS est une fonctionnalité premium nécessitant une licence Premium ou Premium XL. La licence Premium prend en charge la création de machines virtuelles de petite et moyenne taille, ainsi que de disques durs et SSD. La licence Premium XL prend également en charge la création de disques NVMe.
+
+
+NOTE: MetroCluster SDS est compatible avec le stockage local (DAS) et le stockage partagé (vNAS). Notez que les configurations vNAS présentent généralement une latence intrinsèque plus élevée en raison du réseau entre la machine virtuelle ONTAP Select et le stockage partagé. Les configurations MetroCluster SDS doivent offrir une latence maximale de 10 ms entre les nœuds, latence du stockage partagé comprise. Autrement dit, mesurer uniquement la latence entre les machines virtuelles Select n'est pas suffisant, car la latence du stockage partagé n'est pas négligeable pour ces configurations.

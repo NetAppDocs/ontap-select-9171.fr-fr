@@ -1,0 +1,248 @@
+---
+sidebar: sidebar 
+permalink: reference_plan_ots_storage.html 
+keywords: plan, planning, storage, software raid, hardware raid, raid, nvme 
+summary: Il existe plusieurs problèmes de planification liés au stockage hôte ONTAP Select que vous devez prendre en compte. 
+---
+= Considérations relatives au stockage ONTAP Select et au RAID
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Il existe plusieurs problèmes de planification liés au stockage hôte ONTAP Select que vous devez prendre en compte.
+
+
+NOTE: Les informations relatives à la prise en charge du stockage externe sont décrites danslink:reference_plan_ots_vnas.html["Configuration ONTAP Select vNAS"] .
+
+
+
+== Configuration requise pour le contrôleur RAID matériel
+
+Le contrôleur RAID sur l’hôte hyperviseur sur lequel vous déployez ONTAP Select doit répondre à plusieurs exigences.
+
+
+NOTE: Un hôte exécutant ONTAP Select nécessite des disques physiques locaux lors de l'utilisation d'un contrôleur RAID matériel ou de la fonctionnalité RAID logicielle fournie avec ONTAP Select. Si vous utilisez la solution vNAS ONTAP Select pour accéder à un stockage externe, le contrôleur RAID local et la fonctionnalité RAID logicielle ne sont pas nécessaires.
+
+La configuration minimale requise pour le contrôleur RAID comprend :
+
+* Débit de 12 Gbit/s
+* 512 Mo de cache interne alimenté par batterie ou flash (SuperCAP)
+* Configuré en mode écriture différée :
++
+** Activer le mode de restauration automatique pour « écrire directement » (si pris en charge)
+** Activer la politique « Toujours lire à l'avance » (si prise en charge)
+
+
+* Tous les disques locaux derrière le contrôleur RAID doivent être configurés comme un seul groupe RAID ; plusieurs contrôleurs RAID peuvent être utilisés si nécessaire :
++
+** Désactivez le cache du lecteur local pour le groupe RAID, ce qui est fondamental pour préserver l’intégrité des données.
+
+
+* La configuration du LUN doit être effectuée selon les directives suivantes :
++
+** Si la taille du groupe RAID dépasse la taille maximale du LUN de 64 To, vous devez configurer plusieurs LUN de taille égale consommant tout le stockage disponible dans le groupe RAID.
+** Si la taille du groupe RAID est inférieure à la taille maximale du LUN de 64 To, vous devez configurer un LUN consommant tout le stockage disponible dans le groupe RAID.
+
+
+
+
+
+
+== Exigences du logiciel RAID
+
+Lors du déploiement d'un cluster ONTAP Select sur l'hyperviseur, vous pouvez utiliser la fonctionnalité RAID logicielle fournie par ONTAP Select au lieu d'un contrôleur RAID matériel local. Plusieurs exigences et restrictions doivent être prises en compte avant de déployer un cluster utilisant le RAID logiciel.
+
+
+
+=== Exigences générales
+
+L'environnement d'un déploiement RAID logiciel doit répondre aux exigences fondamentales suivantes :
+
+* VMware ESXi 7.0 GA (build 15843807) ou version ultérieure
+* Licence premium ONTAP Select ou supérieure
+* Disques SSD locaux uniquement
+* Séparation des disques système de la racine et des agrégats de données
+* Aucun contrôleur RAID matériel sur l'hôte
+
+
+
+NOTE: Si un contrôleur RAID matériel est présent, consultez la section correspondante.link:concept_stor_concepts_chars.html["Stockage en profondeur"] section pour les exigences de configuration supplémentaires.
+
+
+
+=== Exigences spécifiques à ESXi
+
+* VMware ESXi 7.0 GA (build 15843807) ou version ultérieure
+* VMware VMotion, HA et DRS ne sont pas pris en charge
+* Vous ne pouvez pas utiliser le RAID logiciel avec un nœud mis à niveau depuis ONTAP Select 9.4 ou une version antérieure. Dans ce cas, vous devez créer un nouveau nœud pour le déploiement du RAID logiciel.
+
+
+
+
+=== Exigences spécifiques au KVM
+
+Il existe également des exigences spécifiques de configuration des progiciels. Voir lelink:https://docs.netapp.com/us-en/ontap-select/kvm-host-configuration-and-preparation-checklist.html#prepare-linux-server["préparation du serveur Linux"] Pour plus d'informations, veuillez suivre les instructions ci-dessous.
+
+Les attentes des médias envers KVM:: Les périphériques de stockage flash SSD utilisés doivent répondre aux exigences supplémentaires suivantes :
++
+--
+* Les périphériques SSD doivent se signaler avec précision et persistance à l'hôte Linux via les méthodes suivantes :
++
+** # cat /sys/block/<device>/queue/rotational
++
+La valeur signalée pour ces commandes doit être « 0 ».
+
+
+
+* Les périphériques sont généralement connectés à un HBA ou, dans certains cas, à un contrôleur RAID configuré pour fonctionner en mode JBOD. Avec un contrôleur RAID, la fonction du périphérique doit être transmise via l'hôte sans superposer aucune fonctionnalité RAID. Si vous utilisez un contrôleur RAID en mode JBOD, consultez la documentation RAID ou contactez le fournisseur si nécessaire pour vous assurer que le périphérique indique une vitesse de rotation de « 0 ».
+* Il existe deux composants de stockage distincts :
++
+** Stockage de machine virtuelle
++
+Il s'agit d'un pool LVM (pool de stockage) contenant les données système utilisées pour héberger la machine virtuelle ONTAP Select . Ce pool LVM doit être soutenu par un périphérique Flash haute endurance, de type SAS, SATA ou NVMe. Un périphérique NVMe est recommandé pour de meilleures performances.
+
+** Disques de données
++
+Il s'agit d'un ensemble de disques SSD SAS ou SATA utilisés pour la gestion des données. Les SSD doivent être de qualité professionnelle et durables. L'interface NVMe n'est pas prise en charge.
+
+
+
+* Tous les appareils doivent être formatés avec 512 BPS.
+
+
+--
+
+
+
+
+=== Configuration du nœud ONTAP Select
+
+Vous devez configurer chaque nœud ONTAP Select et hôte hyperviseur comme suit pour séparer les disques système de la racine et des agrégats de données :
+
+* Créer un pool de stockage système Vous devez créer un pool de stockage pour les données système ONTAP Select . Vous devez attacher le pool de stockage lors de la configuration du nœud ONTAP Select .
+* Attacher les disques physiques nécessaires : l'hôte hyperviseur doit disposer des disques SSD requis, connectés et utilisables par la machine virtuelle ONTAP Select . Ces disques contiennent la racine et les agrégats de données. Vous devez attacher les disques de stockage lors de la configuration du nœud ONTAP Select .
+
+
+
+
+== Restrictions de capacité de stockage
+
+Dans le cadre de la planification d’un déploiement ONTAP Select , vous devez être conscient des restrictions liées à l’allocation et à l’utilisation du stockage.
+
+Les principales restrictions de stockage sont présentées ci-dessous. Vous devriez également consulter lelink:https://mysupport.netapp.com/matrix/["Outil de matrice d'interopérabilité"^] pour des informations plus détaillées.
+
+
+TIP: ONTAP Select impose plusieurs restrictions relatives à l'allocation et à l'utilisation du stockage. Avant de déployer un cluster ONTAP Select ou d'acheter une licence, il est important de connaître ces restrictions. Voir lelink:https://docs.netapp.com/us-en/ontap-select/concept_lic_evaluation.html["Licence"] section pour plus d'informations.
+
+
+
+=== Calculer la capacité de stockage brute
+
+La capacité de stockage ONTAP Select correspond à la taille totale autorisée des données virtuelles et des disques racines connectés à la machine virtuelle ONTAP Select . Vous devez en tenir compte lors de l'allocation de capacité.
+
+
+
+=== Capacité de stockage minimale pour un cluster à nœud unique
+
+La taille minimale du pool de stockage alloué au nœud dans un cluster à nœud unique est :
+
+* Évaluation : 500 Go
+* Production : 1,0 To
+
+
+L'allocation minimale pour un déploiement de production se compose de 1 To pour les données utilisateur, plus environ 266 Go utilisés par divers processus internes ONTAP Select , ce qui est considéré comme une surcharge requise.
+
+
+
+=== Capacité de stockage minimale pour un cluster multi-nœuds
+
+La taille minimale du pool de stockage alloué à chaque nœud dans un cluster multi-nœuds est :
+
+* Évaluation : 1,9 To
+* Production : 2,0 To
+
+
+L'allocation minimale pour un déploiement de production se compose de 2 To pour les données utilisateur, plus environ 266 Go utilisés par divers processus internes ONTAP Select , ce qui est considéré comme une surcharge requise.
+
+[NOTE]
+====
+Chaque nœud d’une paire HA doit avoir la même capacité de stockage.
+
+Lors de l'estimation de la quantité de stockage d'une paire HA, il faut tenir compte du fait que tous les agrégats (racine et données) sont mis en miroir. Par conséquent, chaque plex de l'agrégat consomme la même quantité de stockage.
+
+Par exemple, lorsqu'un agrégat de 2 To est créé, il alloue 2 To à deux instances plex (2 To pour plex0 et 2 To pour plex1) ou 4 To de la quantité totale de stockage sous licence.
+
+====
+
+
+=== Capacité de stockage et pools de stockage multiples
+
+Vous pouvez configurer chaque nœud ONTAP Select pour utiliser jusqu'à 400 To de stockage avec un stockage local à connexion directe, VMware vSAN ou des baies de stockage externes. Cependant, un pool de stockage unique a une taille maximale de 64 To avec un stockage à connexion directe ou des baies de stockage externes. Par conséquent, si vous prévoyez d'utiliser plus de 64 To de stockage dans ces situations, vous devez allouer plusieurs pools de stockage comme suit :
+
+* Attribuer le pool de stockage initial pendant le processus de création du cluster
+* Augmentez le stockage des nœuds en allouant un ou plusieurs pools de stockage supplémentaires
+
+
+
+NOTE: Une mémoire tampon de 2 % est laissée inutilisée dans chaque pool de stockage et ne nécessite pas de licence de capacité. Ce stockage n'est pas utilisé par ONTAP Select, sauf si une limite de capacité est spécifiée. Si une limite de capacité est spécifiée, cette quantité de stockage sera utilisée, sauf si elle se situe dans la zone tampon de 2 %. La mémoire tampon est nécessaire pour éviter les erreurs occasionnelles lors de l'allocation de la totalité de l'espace d'un pool de stockage.
+
+
+
+=== Capacité de stockage et VMware vSAN
+
+Lors de l'utilisation de VMware vSAN, une banque de données peut dépasser 64 To. Cependant, vous ne pouvez allouer initialement que 64 To maximum lors de la création du cluster ONTAP Select . Une fois le cluster créé, vous pouvez allouer du stockage supplémentaire à partir de la banque de données vSAN existante. La capacité de la banque de données vSAN utilisable par ONTAP Select dépend de la stratégie de stockage de la machine virtuelle.
+
+
+
+=== Meilleures pratiques
+
+Vous devez prendre en compte les recommandations suivantes concernant le matériel principal de l'hyperviseur :
+
+* Tous les disques d'un même agrégat ONTAP Select doivent être du même type. Par exemple, évitez de mélanger des disques durs et des SSD dans un même agrégat.
+
+
+
+
+== Exigences supplémentaires relatives aux lecteurs de disque en fonction de la licence de la plate-forme
+
+Les lecteurs que vous choisissez sont limités en fonction de l'offre de licence de la plateforme.
+
+
+NOTE: Les exigences relatives aux disques durs s'appliquent à l'utilisation d'un contrôleur et de disques RAID locaux, ainsi qu'à un RAID logiciel. Ces exigences ne s'appliquent pas au stockage externe accessible via la solution vNAS ONTAP Select .
+
+.Standard
+* 8 à 60 disques durs internes (NL-SAS, SATA, 10K SAS)
+
+
+.Prime
+* 8 à 60 disques durs internes (NL-SAS, SATA, 10K SAS)
+* 4 à 60 SSD internes
+
+
+.Premium XL
+* 8 à 60 disques durs internes (NL-SAS, SATA, 10K SAS)
+* 4 à 60 SSD internes
+* 4 à 14 NVMe internes
+
+
+
+NOTE: Le RAID logiciel avec disques DAS locaux est pris en charge avec la licence premium (SSD uniquement) et la licence premium XL (SSD ou NVMe).
+
+
+
+== Disques NVMe avec RAID logiciel
+
+Vous pouvez configurer un RAID logiciel pour utiliser des disques SSD NVMe. Votre environnement doit répondre aux exigences suivantes :
+
+* ONTAP Select avec un utilitaire d'administration Deploy pris en charge
+* Offre de licence de plateforme Premium XL ou licence d'évaluation de 90 jours
+* VMware ESXi version 6.7 ou ultérieure
+* Périphériques NVMe conformes à la spécification 1.0 ou ultérieure
+
+
+Vous devez configurer manuellement les lecteurs NVMe avant de les utiliser. Voirlink:task_chk_nvme_configure.html["Configurer un hôte pour utiliser des lecteurs NVMe"] pour plus d'informations.

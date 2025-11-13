@@ -1,0 +1,24 @@
+---
+sidebar: sidebar 
+permalink: concept_perf_general.html 
+keywords: ontap select, performance 
+summary: Les performances d’un cluster ONTAP Select peuvent varier en fonction de la configuration matérielle. 
+---
+= Aperçu des performances ONTAP Select
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Les performances d'un cluster ONTAP Select peuvent varier considérablement en fonction des caractéristiques du matériel et de la configuration sous-jacents. La configuration matérielle spécifique est le facteur le plus important pour les performances d'une instance ONTAP Select donnée. Voici quelques facteurs qui influencent les performances d'une instance ONTAP Select spécifique :
+
+* *Fréquence principale*. En général, une fréquence plus élevée est préférable.
+* *Socket unique ou multisocket*. ONTAP Select n'utilise pas les fonctionnalités multisocket, mais la surcharge de l'hyperviseur pour la prise en charge des configurations multisocket explique une certaine variation des performances globales.
+* *Configuration de la carte RAID et pilote d'hyperviseur associé*. Le pilote par défaut fourni par l'hyperviseur devra peut-être être remplacé par le pilote du fournisseur du matériel.
+* *Type de lecteur et nombre de lecteurs dans le(s) groupe(s) RAID*.
+* *Version de l'hyperviseur et niveau de correctif*.
+

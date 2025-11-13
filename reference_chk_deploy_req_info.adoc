@@ -1,0 +1,71 @@
+---
+sidebar: sidebar 
+permalink: reference_chk_deploy_req_info.html 
+keywords: ontap select, deploy, pre-installation, vmware 
+summary: Avant d’installer l’utilitaire d’administration Deploy dans un environnement VMware, examinez les exigences de base et préparez-vous à un déploiement réussi. 
+---
+= Informations requises pour l'installation de l'utilitaire ONTAP Select Deploy
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Avant d’installer l’utilitaire d’administration Deploy dans un environnement d’hyperviseur, examinez les informations de configuration requises et les informations de configuration réseau facultatives pour préparer un déploiement réussi.
+
+
+
+== Informations de configuration requises
+
+Dans le cadre de votre planification de déploiement, vous devez déterminer les informations de configuration requises avant d'installer l'utilitaire d'administration ONTAP Select Deploy.
+
+[cols="40,60"]
+|===
+| Informations requises | Description 
+
+
+| Nom de la machine virtuelle à déployer | Identifiant à utiliser pour la machine virtuelle. 
+
+
+| Nom de l'hôte hyperviseur | Identifiant de l'hôte hyperviseur VMware ESXi ou KVM sur lequel l'utilitaire de déploiement est installé. 
+
+
+| Nom du magasin de données | Identifiant du magasin de données de l'hyperviseur contenant les fichiers de la machine virtuelle (environ 40 Go sont requis). 
+
+
+| Réseau pour la machine virtuelle | Identifiant du réseau auquel la machine virtuelle de déploiement est connectée. 
+|===
+
+
+== Informations facultatives sur la configuration du réseau
+
+La machine virtuelle Deploy est configurée par défaut via DHCP. Cependant, si nécessaire, vous pouvez configurer manuellement l'interface réseau de la machine virtuelle.
+
+[cols="35,65"]
+|===
+| Informations sur le réseau | Description 
+
+
+| Nom d'hôte | Identifiant de la machine hôte. 
+
+
+| Adresse IP de l'hôte | Adresse IPv4 statique de la machine hôte. 
+
+
+| Masque de sous-réseau | Masque de sous-réseau, basé sur le réseau dont la machine virtuelle fait partie. 
+
+
+| Porte | Passerelle ou routeur par défaut. 
+
+
+| Serveur DNS principal | Serveur de noms de domaine principal. 
+
+
+| Serveur DNS secondaire | Serveur de noms de domaine secondaire. 
+
+
+| Rechercher des domaines | Liste des domaines de recherche à utiliser. 
+|===

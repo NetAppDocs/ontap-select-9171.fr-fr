@@ -1,0 +1,174 @@
+---
+sidebar: sidebar 
+permalink: task_cluster_expansion_contraction.html 
+keywords: cluster, expand, expansion, contract, contraction, six, eight, node deployment workflow, workflow, deployment steps 
+summary: 'À partir d" ONTAP Select 9.15.1, vous pouvez augmenter ou diminuer la taille d"un cluster existant.' 
+---
+= Étendre ou réduire un cluster ONTAP Select sur un hôte ESXi ou KVM
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Vous pouvez augmenter la taille du cluster d'un cluster ONTAP Select existant pour les hôtes d'hyperviseur ESXi et KVM. Pour les hôtes KVM, vous pouvez augmenter la taille du cluster de six à huit nœuds et réduire la taille de huit à six nœuds. Pour les hôtes ESXi, vous augmentez et diminuez la taille du cluster par incréments compris entre six et douze nœuds.
+
+Les extensions et contractions de cluster suivantes ne sont pas prises en charge pour les hôtes ESXi et KVM :
+
+* Extensions de clusters à un, deux ou quatre nœuds vers des clusters à six ou huit nœuds.
+* Contractions de clusters à six ou huit nœuds vers des clusters à un, deux ou quatre nœuds.
+
+
+[NOTE]
+====
+Pour modifier le nombre de nœuds d'un cluster à une taille qui n'est pas prise en charge par l'extension ou la contraction du cluster, vous devez effectuer les tâches suivantes :
+
+. Déployez un nouveau cluster multi-nœuds en utilisantlink:task_cli_deploy_cluster.html["CLI"] ou lelink:task_deploy_cluster.html["interface Web"] fourni avec l'utilitaire d'administration ONTAP Select Deploy.
+. Le cas échéant, migrez les données vers le nouveau cluster en utilisantlink:https://docs.netapp.com/us-en/ontap/data-protection/snapmirror-disaster-recovery-concept.html["Réplication SnapMirror"^] .
+
+
+====
+Vous lancez les procédures d’extension et de contraction du cluster à partir d’ ONTAP Select Deploy à l’aide de l’interface CLI, de l’API ou de l’interface Web.
+
+
+
+== Considérations relatives au matériel et au stockage
+
+La fonctionnalité d’extension et de contraction de cluster est prise en charge sur les hôtes d’hyperviseur KVM et ESXi suivants.
+
+[role="tabbed-block"]
+====
+.ESXi
+--
+À partir d’ ONTAP Select 9.15.1, l’extension et la contraction des clusters sont prises en charge sur les hôtes hyperviseurs ESXi.
+
+L'extension et la contraction des clusters sont prises en charge pour les versions d'hyperviseur ESXi suivantes :
+
+* ESXi 9.0
+* ESXi 8.0 U3
+* ESXi 8.0 U2
+* ESXi 8.0 U1
+* ESXi 8.0 GA
+* ESXi 7.0 U3
+* ESXi 7.0
+
+
+--
+.KVM
+--
+À partir d' ONTAP Select 9.17.1, l'extension et la contraction des clusters sont prises en charge sur les hôtes hyperviseurs KVM.
+
+L'extension et la contraction des clusters sont prises en charge pour les versions d'hyperviseur KVM suivantes :
+
+* Red Hat Enterprise Linux 64 bits 9.6, 9.5, 9.4, 9.3, 9.2, 9.1, 9.0, 8.8, 8.7 et 8.6
+* Rocky Linux 9.6, 9.5, 9.4, 9.3, 9.2, 9.1, 9.0, 8.9, 8.8, 8.7 et 8.6
+
+
+--
+====
+
+
+== Développer le cluster
+
+Utilisez la fonction d’extension de cluster pour augmenter la taille d’un cluster ESXi ou KVM existant.
+
+[role="tabbed-block"]
+====
+.ESXi
+--
+Vous pouvez augmenter la taille d’un cluster ESXi existant selon les incréments suivants :
+
+* De six nœuds à huit, dix ou douze nœuds
+* De huit nœuds à dix ou douze nœuds
+* De dix à douze nœuds
+
+
+--
+.KVM
+--
+Vous pouvez augmenter la taille d’un cluster KVM existant de six à huit nœuds.
+
+--
+====
+.À propos de cette tâche
+En prévision de l'extension du cluster, de nouveaux hôtes ESXi et KVM sont ajoutés à l'inventaire et les détails des nouveaux nœuds sont attribués. Avant de lancer l'extension du cluster, une pré-vérification du réseau interne est effectuée.
+
+.Avant de commencer
+* Lors du déploiement d'un cluster multi-nœuds, vous devez vous familiariser avec le vérificateur de connectivité réseau. Vous pouvez exécuter le vérificateur de connectivité réseau en utilisant lelink:task_adm_connectivity.html["interface Web"] ou lelink:task_cli_connectivity.html["CLI"] .
+* Vérifiez que vous disposez des détails de licence pour les nouveaux nœuds.
+
+
+.Étapes
+. Sign in à l’interface utilisateur Web de l’utilitaire de déploiement à l’aide du compte administrateur.
+. Sélectionnez l’onglet *Cluster* en haut de la page et sélectionnez le cluster souhaité dans la liste.
+. Sur la page des détails du cluster, sélectionnez l'icône d'engrenage à droite de la page et sélectionnez *Développer le cluster*.
+. Accédez à la section *HA Pair 4*.
+. Choisissez les détails de configuration de paire haute disponibilité (HA) suivants pour la quatrième paire HA :
++
+** Type d'instance
+** Noms de nœuds
+** Hôtes hyperviseurs associés
+** Adresses IP des nœuds
+** Licences
+** Configuration du réseau
+** Configuration du stockage (type RAID et pools de stockage)
+
+
+. Sélectionnez *Enregistrer la paire HA* pour enregistrer les détails de configuration.
+. Fournissez les informations d’identification ONTAP et sélectionnez *Développer le cluster*.
+. Sélectionnez *Suivant* et exécutez la pré-vérification du réseau en sélectionnant *Exécuter*.
++
+La pré-vérification du réseau valide que le réseau interne sélectionné pour le trafic du cluster ONTAP fonctionne correctement.
+
+. Sélectionnez *Développer le cluster* pour lancer le processus d’extension du cluster, puis sélectionnez *OK* dans la boîte de dialogue.
++
+L’extension du cluster peut prendre jusqu’à 45 minutes.
+
+. Surveillez le processus d’extension du cluster en plusieurs étapes pour confirmer que le cluster s’est étendu avec succès.
+. Consultez l'onglet *Événements* pour des mises à jour régulières sur l'avancement de l'opération. La page est automatiquement actualisée à intervalles réguliers.
+
+
+.Après avoir terminé
+link:task_cli_clusters.html["Sauvegardez les données de configuration de déploiement ONTAP Select"].
+
+
+
+== Contracter le cluster
+
+Utilisez la fonction de contraction de cluster pour réduire la taille d’un cluster ESXi ou KVM existant.
+
+[role="tabbed-block"]
+====
+.ESXi
+--
+Vous pouvez réduire la taille d’un cluster ESXi existant selon les incréments suivants :
+
+* De douze nœuds à dix, huit ou six nœuds
+* De dix nœuds à huit ou six nœuds
+* De huit à six nœuds
+
+
+--
+.KVM
+--
+Vous pouvez réduire la taille d’un cluster existant de huit à six nœuds.
+
+--
+====
+.À propos de cette tâche
+La paire de nœuds HA souhaitée dans le cluster est sélectionnée pour préparer la contraction du cluster pendant la procédure.
+
+.Étapes
+. Sign in à l’interface utilisateur Web de l’utilitaire de déploiement à l’aide du compte administrateur.
+. Sélectionnez l’onglet *Cluster* en haut de la page et sélectionnez le cluster souhaité dans la liste.
+. Sur la page des détails du cluster, sélectionnez l'icône d'engrenage à droite de la page, puis sélectionnez *Cluster de contrat*.
+. Sélectionnez les détails de configuration de la paire HA pour toute paire HA que vous souhaitez supprimer et fournissez les informations d'identification ONTAP , puis sélectionnez *Contract Cluster*.
++
+La contraction du cluster peut prendre jusqu’à 30 minutes.
+
+. Surveillez le processus de contraction du cluster en plusieurs étapes pour confirmer que le cluster s'est contracté avec succès.
+. Consultez l'onglet *Événements* pour des mises à jour régulières sur l'avancement de l'opération. La page est automatiquement actualisée à intervalles réguliers.
+

@@ -1,0 +1,137 @@
+---
+sidebar: sidebar 
+permalink: concept_ots_overview.html 
+keywords: overview, software defined storage, sds, typical deployment, ontap 9 
+summary: 'ONTAP Select est une version logicielle d" ONTAP que vous déployez en tant que machine virtuelle sur un hôte hyperviseur. Elle complète la suite d"offres ONTAP FAS et AFF classiques, ainsi que d"autres options logicielles telles que Cloud Volumes ONTAP.' 
+---
+= En savoir plus sur ONTAP Select
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+ONTAP Select est une version logicielle d' ONTAP que vous pouvez déployer en tant que machine virtuelle sur un hôte hyperviseur. Elle complète la suite d'offres ONTAP standard FAS, AFF et ASA , ainsi que d'autres options logicielles telles que Cloud Volumes ONTAP.
+
+ONTAP Select convertit les disques durs internes, NVMe, SSD ou HDD, ainsi que les baies de stockage externes en un système de stockage flexible offrant de nombreux avantages identiques à ceux des systèmes de stockage ONTAP dédiés. Vous pouvez également déployer ONTAP Select sur de nouveaux serveurs ou sur votre infrastructure existante. ONTAP Select est facile à gérer et utilise le même logiciel de gestion que les solutions ONTAP , ce qui réduit les frais d'exploitation et les besoins en formation.
+
+ONTAP Select s'adapte à vos besoins en termes de capacité grâce à deux modèles de licences complémentaires : les niveaux de capacité et les pools de capacité, entièrement flexibles. Ces deux modèles vous permettent d'augmenter la capacité par incréments de seulement 1 To. Par exemple, vous pouvez commencer avec quelques téraoctets et augmenter la capacité de manière dynamique à mesure que votre projet se développe. Si vous utilisez les pools de capacité, vous pouvez redistribuer la capacité comme bon vous semble une fois votre projet terminé.
+
+ONTAP Select s'intègre aux infrastructures de gestion cloud telles que VMware vSphere. Cela permet d'accélérer le déploiement de nouveaux projets tels que les services de fichiers, les répertoires personnels, les environnements de développement logiciel et les tests d'applications.
+
+Le logiciel SnapMirror vous permet de déplacer des données entre le stockage ONTAP et le cloud hybride, vous permettant ainsi d'y accéder facilement où vous le souhaitez. Par exemple, vous pouvez rapidement mettre en place un environnement pour valider une idée. Vous pouvez ensuite déplacer le projet vers une plateforme de stockage dédiée pour un déploiement en production ou le rendre plus accessible dans le cloud dans le cadre d'un workflow de développement.
+
+
+
+== Stockage défini par logiciel
+
+La mise en œuvre et la fourniture de services informatiques par logiciel permettent aux administrateurs de provisionner rapidement des ressources avec une rapidité et une agilité jusqu'alors impossibles. Avec la transition des centres de données modernes vers une architecture d'infrastructure définie par logiciel (SDI), il est possible de séparer les ressources informatiques les plus précieuses de l'infrastructure physique sous-jacente, offrant ainsi flexibilité, évolutivité et programmabilité.
+
+Dans un monde de produits de base où les données sont fragmentées entre des silos de stockage à connexion directe (DAS), la mobilité et la gestion des données sont devenues des problèmes plus complexes. Le stockage défini par logiciel (SDS) est devenu un élément important du paysage SDI pour répondre à ces problèmes, entre autres.
+
+ONTAP Select est la solution NetApp destinée au marché SDS. ONTAP Select apporte des fonctionnalités de gestion du stockage de niveau entreprise aux data centers définis par logiciel et étend l'architecture NetApp Data Fabric aux cas d'utilisation extrêmes, notamment l'Internet des objets (IoT) et les serveurs tactiques.
+
+
+
+== Deux composants logiciels
+
+ONTAP Select est composé de deux composants logiciels majeurs :
+
+
+
+=== ONTAP Select
+
+Un cluster ONTAP Select est composé d'un, deux, quatre, six ou huit nœuds. Chaque nœud est déployé comme une machine virtuelle distincte et exécute une version spécialement conçue du logiciel ONTAP 9.
+
+
+
+=== Utilitaire d'administration ONTAP Select Deploy
+
+L'utilitaire d'administration Deploy est fourni et installé en tant que machine virtuelle Linux distincte. Vous devez l'utiliser pour déployer des clusters ONTAP Select en environnement de production. Une version actuelle de l'image du nœud ONTAP Select est fournie avec l'utilitaire Deploy.
+
+
+NOTE: Aucun numéro de version distinct n'est attribué à l'utilitaire d'administration Deploy. Deploy possède le même numéro de version que la version ONTAP Select associée. Cependant, chaque mise à jour de l'utilitaire Deploy au sein d'une version ONTAP Select spécifique possède un numéro de build unique.
+
+
+
+== Illustration d'un déploiement typique
+
+La figure suivante illustre l'utilisation de l'utilitaire d'administration NetApp ONTAP Select Deploy pour déployer et prendre en charge un cluster ONTAP Select à quatre nœuds. L'utilitaire Deploy et les nœuds ONTAP Select fonctionnent comme des machines virtuelles distinctes sur des hôtes hyperviseurs dédiés.
+
+image:ots_architecture.png["Illustre un cluster à quatre nœuds ONTAP Select créé avec l'utilitaire d'administration Deploy."]
+
+
+
+== Comparer ONTAP Select et ONTAP 9
+
+ONTAP et ONTAP Select, basés sur le matériel, offrent tous deux des solutions de stockage de niveau entreprise. Cependant, leur conception et leur mise en œuvre étant différentes, chacun peut répondre à des besoins métier et à des scénarios d'utilisation différents. Il est important de se familiariser avec les principales différences entre ces plateformes avant de planifier un déploiement d' ONTAP Select .
+
+
+
+=== Différentes architectures HA
+
+Selon le nombre de nœuds définis dans un cluster, ONTAP Select offre une fonctionnalité haute disponibilité. Par exemple, un cluster à quatre nœuds est composé de deux paires HA. L'architecture haute disponibilité utilisée avec ONTAP Select repose sur un modèle de stockage non partagé. Autrement dit, un nœud d'une paire haute disponibilité ne peut pas accéder directement au stockage appartenant à l'autre nœud. Cette conception peut affecter certaines caractéristiques opérationnelles ONTAP Select .
+
+
+
+=== Licences de capacité
+
+ONTAP Select introduit un modèle de licence basé sur la consommation. Lors du déploiement d'un cluster ONTAP Select en production, vous devez acheter une licence avec une capacité de stockage pour chaque nœud ou pool de capacité partagé. À l'aide de l'utilitaire de déploiement, vous devez appliquer les fichiers de licence qui définissent la capacité de stockage des nœuds du cluster.
+
+
+
+=== Licences de fonctionnalités ONTAP
+
+Chaque nœud d'un cluster ONTAP Select dispose automatiquement d'une licence pour utiliser plusieurs fonctionnalités ONTAP . Vous n'avez pas besoin d'installer ou d'appliquer manuellement ces licences.
+
+
+
+=== Fonctionnalités ONTAP non prises en charge dans ONTAP Select
+
+Plusieurs fonctionnalités ONTAP ne sont pas prises en charge par ONTAP Select. Dans la plupart des cas, ces fonctionnalités nécessitent un matériel spécifique, non disponible dans l'environnement virtualisé ONTAP Select .
+
+* Mises à jour automatiques pour la protection autonome contre les ransomwares (ARP)
++
+
+NOTE: À partir d' ONTAP Select 9.16.1, les mises à jour manuelles d'ARP sont prises en charge et la licence de fonctionnalité ARP est incluse dans le fichier de licence NetApp (NLF).
+
+* Espace IP du cluster
++
+Toute modification de l'espace IP du cluster, y compris l'ajout ou la suppression de ports, de réseaux locaux virtuels (VLAN) ou de groupes d'agrégation de liens, n'est pas prise en charge.
+
+* Fibre Channel
++
+Fibre Channel et Fibre Channel sur Ethernet ne sont pas pris en charge.
+
+* Moniteurs de santé
++
+La surveillance de l'intégrité traditionnelle utilisée avec un déploiement ONTAP basé sur le matériel est spécifique aux composants matériels sous-jacents. En raison de l'environnement virtualisé utilisé avec ONTAP Select, les surveillances de l'intégrité ne sont pas actives.
+
+* Groupes d'interface
++
+Les groupes d'interfaces ne sont pas pris en charge.
+
+* Gestionnaire de clés multi-locataires (MTKM)
+* Prise en charge du déchargement de la carte réseau
++
+En raison de l'environnement virtualisé utilisé avec ONTAP Select, la fonction de déchargement de la carte réseau n'est pas prise en charge.
+
+* Lecteurs de chiffrement de stockage NetApp
+* Propriétés du port ONTAP
++
+La modification des propriétés des ports ONTAP , notamment la vitesse, le duplex et le contrôle de flux, n'est pas prise en charge.
+
+* Processeurs de services
+* Migration SVM
+* SnapLock Compliance
+* Synchronisation active de SnapMirror
+* VMware HCX
+
+
+.Informations connexes
+* link:reference_lic_ontap_features.html#ontap-features-automatically-enabled-by-default["En savoir plus sur les fonctionnalités ONTAP activées par défaut"]
+* link:concept_lic_evaluation.html["En savoir plus sur les options de licence ONTAP Select"]
+

@@ -1,0 +1,46 @@
+---
+sidebar: sidebar 
+permalink: concept_nw_data_mgmt_separation.html 
+keywords: ontap select, traffic separation 
+summary: Isolez le trafic de données et le trafic de gestion dans des réseaux de couche 2 distincts. 
+---
+= Séparation du trafic de données et de gestion ONTAP Select
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Isolez le trafic de données et le trafic de gestion dans des réseaux de couche 2 distincts.
+
+Le trafic réseau externe ONTAP Select comprend le trafic de données (CIFS, NFS et iSCSI), de gestion et de réplication (SnapMirror). Au sein d'un cluster ONTAP , chaque type de trafic utilise une interface logique distincte, hébergée sur un port réseau virtuel. Dans la configuration multinœud d' ONTAP Select, ces ports sont désignés par les ports e0a et e0b/e0g. Dans la configuration mononœud, ils sont désignés par les ports e0a et e0b/e0c, les autres étant réservés aux services internes du cluster.
+
+NetApp recommande d'isoler le trafic de données et le trafic de gestion dans des réseaux de couche 2 distincts. Dans l'environnement ONTAP Select , cela s'effectue à l'aide de balises VLAN. Pour ce faire, attribuez un groupe de ports VLAN à la carte réseau 1 (port e0a) pour le trafic de gestion. Vous pouvez ensuite attribuer un ou plusieurs groupes de ports distincts aux ports e0b et e0c (clusters mono-nœuds) et e0b et e0g (clusters multi-nœuds) pour le trafic de données.
+
+Si la solution VST décrite précédemment dans ce document ne suffit pas, il peut être nécessaire de regrouper les LIF de données et de gestion sur le même port virtuel. Pour ce faire, utilisez un processus appelé VGT, dans lequel le marquage VLAN est effectué par la machine virtuelle.
+
+
+NOTE: La séparation des données et du réseau de gestion via VGT n'est pas disponible avec l'utilitaire ONTAP Deploy. Cette procédure doit être effectuée une fois la configuration du cluster terminée.
+
+Il existe une mise en garde supplémentaire lors de l'utilisation de VGT et de clusters à deux nœuds. Dans les configurations de cluster à deux nœuds, l'adresse IP de gestion du nœud est utilisée pour établir la connectivité au médiateur avant ONTAP ne soit entièrement disponible. Par conséquent, seuls les marquages EST et VST sont pris en charge sur le groupe de ports mappé à la LIF de gestion du nœud (port e0a). De plus, si le trafic de gestion et le trafic de données utilisent le même groupe de ports, seuls les protocoles EST/VST sont pris en charge pour l'ensemble du cluster à deux nœuds.
+
+Les deux options de configuration, VST et VGT, sont prises en charge. La figure suivante illustre le premier scénario, VST, dans lequel le trafic est balisé au niveau de la couche vSwitch via le groupe de ports attribué. Dans cette configuration, les LIF de gestion de cluster et de nœud sont affectées au port ONTAP e0a et balisées avec l'ID VLAN 10 via le groupe de ports attribué. Les LIF de données sont affectées au port e0b et soit à e0c, soit à e0g, et reçoivent l'ID VLAN 20 via un deuxième groupe de ports. Les ports de cluster utilisent un troisième groupe de ports et se trouvent sur l'ID VLAN 30.
+
+*Séparation des données et de la gestion à l'aide de VST*
+
+image:DDN_04.jpg["Séparation des données et de la gestion à l'aide de VST"]
+
+La figure suivante illustre le deuxième scénario, VGT, dans lequel le trafic est balisé par la machine virtuelle ONTAP à l'aide de ports VLAN placés dans des domaines de diffusion distincts. Dans cet exemple, les ports virtuels e0a-10/e0b-10/(e0c ou e0g)-10 et e0a-20/e0b-20 sont placés au-dessus des ports e0a et e0b de la machine virtuelle. Cette configuration permet d'effectuer le balisage réseau directement dans ONTAP, plutôt qu'au niveau de la couche vSwitch. Les LIF de gestion et de données sont placées sur ces ports virtuels, permettant une subdivision supplémentaire de la couche 2 au sein d'un même port de machine virtuelle. Le VLAN du cluster (ID VLAN 30) est toujours balisé au niveau du groupe de ports.
+
+*Remarques :*
+
+* Ce type de configuration est particulièrement utile lors de l'utilisation de plusieurs espaces IP. Regroupez les ports VLAN dans des espaces IP personnalisés distincts si vous souhaitez une isolation logique et une mutualisation renforcées.
+* Pour prendre en charge VGT, les adaptateurs réseau hôtes ESXi/ESX doivent être connectés aux ports trunk du commutateur physique. L'ID VLAN des groupes de ports connectés au commutateur virtuel doit être défini sur 4095 pour activer le trunking sur le groupe de ports.
+
+
+*Séparation des données et de la gestion à l'aide de VGT*
+
+image:DDN_05.jpg["Séparation des données et de la gestion à l'aide de VGT"]
