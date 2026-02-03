@@ -3898,45 +3898,50 @@
   <block id="02d99372e9e1eb54a9dddd0b08891357" category="list-text">Red Hat Enterprise Linux (RHEL) 10.1, 10.0, 9.7, 9.6, 9.5, 9.4, 9.2, 9.1, 9.0, 8.8, 8.7, et 8.6</block>
   <block id="f1200e5ffcff7a7cc8b8ea25410cc78a" category="list-text">Rocky Linux 10.1, 10.0, 9.7, 9.6, 9.5, 9.4, 9.3, 9.2, 9.1, 9.0, 8.9, 8.8, 8.7, et 8.6</block>
   <block id="d65f97fb1a167a35c6951233420ba74d" category="list-text">Red Hat Enterprise Linux (RHEL) 64-bit 10.1, 10.0, 9.7, 9.6, 9.5, 9.4, 9.3, 9.2, 9.1, 9.0, 8.8, 8.7 et 8.6</block>
-  <block id="e9acce0d3652d40c91f9bd7e814291c0" category="inline-link-macro">NetApp Support Site téléchargements</block>
-  <block id="17838336399b2e69627cea0614c17f30" category="list-text">Accédez à la page <block ref="8e92c016cc209b5ea10cc71b5bfe5577" category="inline-link-macro-rx"></block>.</block>
-  <block id="102500ba079e1f102bac567290d3e053" category="list-text">Faites défiler vers le bas et sélectionnez *ONTAP Select Image*.</block>
-  <block id="1ccd2fe0ab425cd480daec44d7c332ba" category="list-text">Sélectionnez la version souhaitée de l'image d'installation.</block>
-  <block id="b0ccaa273cbf1ac7308b75b9c7fd6d4e" category="list-text">Sélectionnez et téléchargez le package *ONTAP Select Image Upgrade* approprié. Répondez à toutes les invites si nécessaire.</block>
-  <block id="1a8d41e65cef4d345c50298a70f79734" category="inline-link-macro">notes de version</block>
-  <block id="b7a85c17919c6d783689e1a6530de3d7" category="paragraph">Consultez la <block ref="3dda619db99e14ba32fb3b3389030b7d" category="inline-link-macro-rx"></block> pour obtenir des informations supplémentaires et connaître les procédures requises avant de mettre à niveau un nœud ONTAP Select.</block>
-  <block id="ab0efa1679a96e82121715180bb36a1d" category="summary">Ajoutez une image ONTAP Select à votre instance de l'utilitaire d'administration Deploy. Après l'installation, vous pouvez l'utiliser lors du déploiement d'un cluster ONTAP Select.</block>
-  <block id="91dd9283705750f9fe7e837b0a40349f" category="paragraph">Ajoutez une image ONTAP Select à votre instance de l'utilitaire d'administration Deploy. Une fois l'image installée, vous pouvez l'utiliser lors du déploiement d'un cluster ONTAP Select.</block>
-  <block id="c887723161d2b70aba693fc5b80ea33b" category="list-text">Sélectionnez et téléchargez le package *ONTAP Select Image Install* approprié. Répondez à toutes les invites si nécessaire.</block>
-  <block id="04574480371a2b80422d880e51839d84" category="paragraph">Vérifiez que le fichier image d'installation est disponible sur votre poste de travail local. Vous devez également disposer du mot de passe du compte utilisateur administrateur Deploy.</block>
-  <block id="a935f72e89684cc4e1e44be3fa93301b" category="doc">Étape 1 : Téléchargez le package de mise à niveau</block>
-  <block id="4138c5c743e6f7a38cc7aa46349fddb8" category="paragraph">sidebar: sidebar permalink: task_cli_upgrade_deploy.html keywords: administer, administering, cli, deploy, upgrade deploy summary: Vous pouvez mettre à niveau une machine virtuelle de l'utilitaire Deploy existante sur place en utilisant l'interface de ligne de commandes. --- = Mettre à niveau une instance ONTAP Select Deploy :hardbreaks: :nofooter: :icons: font :linkattrs: :imagesdir: ./media/</block>
-  <block id="71b6b56cdf9a8f06858b086466ade95e" category="paragraph">Mettez à niveau une machine virtuelle utilitaire ONTAP Select Deploy existante sur place à l'aide de l'interface de ligne de commande ONTAP Select Deploy.</block>
-  <block id="893d0216a6847b8a50f3efc04d175542" category="paragraph">Vérifiez que ONTAP Select Deploy n'est pas utilisé pour effectuer d'autres tâches pendant la mise à niveau. Consultez la <block ref="3dda619db99e14ba32fb3b3389030b7d" category="inline-link-macro-rx"></block> pour obtenir des informations et des restrictions concernant la mise à niveau de l'utilitaire ONTAP Select Deploy.</block>
-  <block id="bb68cf2408900213fd35084701d5c32c" category="paragraph">Vous pouvez effectuer une mise à niveau directe vers ONTAP Select Deploy 9.18.1 depuis ONTAP Select Deploy 9.17.1 ou 9.16.1. Pour effectuer une mise à niveau depuis ONTAP Select Deploy 9.15.1 ou une version antérieure, consultez les notes de version de votre version d'ONTAP Select.</block>
-  <block id="9c7dbffc228f5e20cfc38dd2e9d52183" category="paragraph">Pour commencer le processus de mise à niveau, téléchargez le fichier de mise à niveau ONTAP Select Deploy depuis le site de support NetApp. Le package de mise à niveau est formaté comme un seul fichier compressé.</block>
-  <block id="c7de263deca2f546c4c7b9417bbb6aec" category="list-text">Faites défiler vers le bas et sélectionnez *ONTAP Select Deploy*.</block>
-  <block id="224ba05e3cb699bfc71537bae00db024" category="list-text">Sélectionnez la version ONTAP Select souhaitée.</block>
-  <block id="edef4f12cb19840bbbb69b8757b99015" category="list-text">Sélectionnez et téléchargez le package *ONTAP Select Deploy Upgrade* approprié. Répondez à toutes les invites si nécessaire.</block>
-  <block id="916c12b3fbccb1ff32e8a4776708798e" category="section-title">Étape 1 : Téléchargez l'image de la machine virtuelle</block>
-  <block id="b6754a68a857ab2b2389816249373a57" category="paragraph">Téléchargez le package ONTAP Select depuis le site de support NetApp.</block>
-  <block id="1ace48b65c22215b19f774b3df5f35bc" category="paragraph">L'utilitaire d'administration ONTAP Select Deploy est fourni sous forme de machine virtuelle (VM) basée sur le standard Open Virtualization Format (OVF). Le fichier compressé unique a le suffixe<block ref="586ba478b7ebec665f3df120799b6c2e" prefix=" " category="inline-code"></block> pour les hôtes ESXi et<block ref="fe0b8e90d35ee4c0d89c53587e2d402e" prefix=" " category="inline-code"></block> pour les hôtes KVM. La VM fournit le serveur Deploy et les images d'installation pour les nœuds ONTAP Select.</block>
-  <block id="1b889c4574d56e52bb5c7740f68139d2" category="list-text">Sélectionnez et téléchargez le package *ONTAP Select Deploy Install* approprié. Répondez à toutes les invites si nécessaire.</block>
-  <block id="0230ee7e6071858ebc377c057e5e603e" category="section-title">Étape 2 : Vérifiez la signature OVA de ONTAP Select Deploy</block>
-  <block id="9e0015dd89b19bd3443ad4f4a14527ab" category="paragraph">Vérifiez la signature de l'Open Virtualization Appliance (OVA) ONTAP Select avant d'installer le package d'installation.</block>
-  <block id="3f5028687bfdb0f40e4748a9cf9f5076" category="list-text">Obtenez les fichiers suivants à partir de la page de téléchargement du produit sur le site d'assistance NetApp :</block>
-  <block id="f754a351095ccdb252bb15b2152c09f3" category="list-text">Vérifiez la signature:</block>
-  <block id="35f9f1c9a9790bd3fc497db798819083" category="section-title">Étape 3 : Déployer la machine virtuelle</block>
-  <block id="a84a05d08c99af325673887887ed8fdb" category="paragraph">Installez et démarrez la machine virtuelle ONTAP Select Deploy à l'aide de l'image OVF. Dans le cadre du processus d'installation, vous configurez l'interface réseau pour utiliser DHCP ou une configuration IP statique.</block>
-  <block id="5029ec7f3dcb7c58660c1d47f8dce6c3" category="list-text">Sélectionnez le fichier OVA et terminez l'assistant de déploiement du modèle OVF. Sélectionnez les options appropriées pour votre environnement.</block>
-  <block id="77b39f7b1e60aa5d2af3e45d47ff1adf" category="list-text">Sélectionnez l'onglet *Console* pour accéder au shell de configuration de l'hôte ESXi et surveiller le processus de mise sous tension.</block>
-  <block id="b976538163f8bd7f20f37762f79adba6" category="list-text">Si vous choisissez une configuration statique, fournissez toutes les informations de configuration réseau requises.</block>
-  <block id="7e5f2ca43da3004f8d3d7bae3edb7bae" category="section-title">Étape 4 : Sign in à l’interface web de déploiement</block>
-  <block id="896f4c4fdd4e61c33a930415e20d88d3" category="paragraph">Sign in à l'interface utilisateur web pour confirmer que l'utilitaire Deploy est disponible et effectuer la configuration initiale.</block>
-  <block id="a88f396cb1d0d25e4d7b5bc9e25d3617" category="paragraph-title">Quelles sont les prochaines étapes :</block>
-  <block id="4452a56e6eb6220413b5f5ed2b39c2eb" category="paragraph"><block ref="4452a56e6eb6220413b5f5ed2b39c2eb" category="inline-link-macro-rx"></block></block>
-  <block id="186a0749125d9c043615b75ece89e1b9" category="inline-link-macro">Découvrez comment vous connecter à Deploy à l'aide de SSH</block>
-  <block id="3127e7fd2160f6fce263d627cbcb5a4d" category="list-text"><block ref="3127e7fd2160f6fce263d627cbcb5a4d" category="inline-link-macro-rx"></block></block>
-  <block id="53e65bd37d1e95a079cd2ec376ccf900" category="inline-link-macro">Découvrez comment déployer une instance d'évaluation de 90 jours d'un cluster ONTAP Select</block>
-  <block id="f5f0f7b9b906ffe1f1af3b3d9bc2a475" category="list-text"><block ref="f5f0f7b9b906ffe1f1af3b3d9bc2a475" category="inline-link-macro-rx"></block></block>
+  <block id="e105a9c27bf2d9ddd5067b411d434cd6" category="list-text">Rendez-vous sur la page de téléchargements du site d'assistance NetApp.</block>
+  <block id="68f9ff06ec00760816a8852081d652a9" category="inline-link">NetApp Support Téléchargements</block>
+  <block id="332fd48f854bf692aea555e091e1b3cc" category="paragraph"><block ref="332fd48f854bf692aea555e091e1b3cc" category="inline-link-rx"></block></block>
+  <block id="eea1cec828c419810e082867558ec301" category="list-text">Cliquez sur *ONTAP Select Node Upgrade*.</block>
+  <block id="a864f71b844955db4e27746202712f1b" category="list-text">Sélectionnez et téléchargez l'image de mise à niveau appropriée en répondant à toutes les invites si nécessaire.</block>
+  <block id="2e17a67d810d937603511ac8eb9044c5" category="paragraph">Consultez les notes de version pour obtenir des informations supplémentaires et connaître les procédures requises avant de mettre à niveau un nœud ONTAP Select.</block>
+  <block id="6738f098cd2bba79a1109b07a6b3a4e3" category="summary">Vous pouvez ajouter une image ONTAP Select à votre instance de l'utilitaire d'administration Deploy. Une fois l'image installée, vous pouvez l'utiliser lors du déploiement d'un cluster ONTAP Select.</block>
+  <block id="42cd2a8efe7c9aac811d923637a0f193" category="list-text">Accédez au site d'assistance NetApp à l'aide d'un navigateur Web et sélectionnez *Liens rapides d'assistance*.</block>
+  <block id="6168f6eb3f1b81ec759f515fdd7bab98" category="list-text">Sélectionnez *Download Software* sous *Top Tasks* et sign in au site.</block>
+  <block id="84791eb50904d5d426f95112ce50d397" category="list-text">Sélectionnez *Find your product*.</block>
+  <block id="a896447aac9deddba0f8b7bc142c079f" category="list-text">Faites défiler vers le bas et sélectionnez *ONTAP Select*.</block>
+  <block id="676522edf33055c4e8da85feed945dc5" category="list-text">Sous *Other Available Select Software*, sélectionnez *Deploy Upgrade, Node Upgrade, Image Install*.</block>
+  <block id="a8601f098fd28588686f1b5ce31da2a1" category="list-text">Sélectionnez la version souhaitée du package de mise à niveau.</block>
+  <block id="9bf3ac5f4cb6341117598df735958bdf" category="list-text">Examinez le contrat de licence utilisateur final (CLUF) et cliquez sur *Accepter et continuer*.</block>
+  <block id="def8f653fff47640d3bcce40244c6331" category="list-text">Sélectionnez et téléchargez le package approprié, en répondant à toutes les invites selon les besoins de votre environnement.</block>
+  <block id="2a5d9f3f5564baf37e1d1a8cf1a3b68c" category="paragraph">Vous devez disposer du fichier image d'installation sur votre poste de travail local. Vous devez également avoir le mot de passe du compte utilisateur administrateur Deploy.</block>
+  <block id="c9732055d20960435002cec722852b3e" category="summary">Vous pouvez mettre à niveau une machine virtuelle utilitaire Deploy existante sur place à l'aide de la ligne de commandes.</block>
+  <block id="6a72bf96d9b994589542338ffd146590" category="doc">Mettre à niveau une instance ONTAP Select Deploy</block>
+  <block id="aee852b160915b647628e7eef82ecf7e" category="paragraph">Vous pouvez mettre à niveau une machine virtuelle utilitaire ONTAP Select Deploy existante sur place à l'aide de la CLI de l'utilitaire ONTAP Select Deploy.</block>
+  <block id="37d4c938e6c31c7ec9166448ac3458f3" category="paragraph">Assurez-vous que ONTAP Select Deploy n'est pas utilisé pour effectuer d'autres tâches pendant la mise à niveau. Consultez les notes de version actuelles pour obtenir des informations et des restrictions concernant la mise à niveau de l'utilitaire ONTAP Select Deploy.</block>
+  <block id="35767fb08a64b94abf91d7c25ea1b1d5" category="paragraph">Vous pouvez effectuer une mise à niveau directe vers ONTAP Select Deploy 9.17.1 depuis ONTAP Select Deploy 9.16.1 ou 9.15.1. Pour effectuer une mise à niveau depuis ONTAP Select Deploy 9.14.1 ou une version antérieure, consultez les notes de version de votre version d'ONTAP Select.</block>
+  <block id="db1b7c6bff7b0da47260c4e758478bf5" category="section-title">Étape 1 : Téléchargez le package</block>
+  <block id="c81ba5c62604d6722d8975fb55e13972" category="paragraph">Pour commencer le processus de mise à niveau, téléchargez le fichier de mise à niveau de la machine virtuelle ONTAP Select Deploy approprié depuis le <block ref="a42716fdd3c80ae75cadfb8024b65de0" category="inline-link-macro-rx"></block>. Le package de mise à niveau est formaté sous la forme d'un seul fichier compressé.</block>
+  <block id="0f0e87daa63b5587a3d3f02aefb73403" category="list-text">Accédez à <block ref="a42716fdd3c80ae75cadfb8024b65de0" category="inline-link-macro-rx"></block> l'aide d'un navigateur Web et choisissez *Téléchargements* dans le menu Téléchargements.</block>
+  <block id="dce12db5fd853ebf9ecc2b9677234aa6" category="list-text">Faites défiler vers le bas et sélectionnez *ONTAP Select Deploy Upgrade*.</block>
+  <block id="da691cb71c1f879ed7bf93a9a845601a" category="section-title">Téléchargez l'image de la machine virtuelle</block>
+  <block id="4457cc766e233dbf5bfec7006eded349" category="paragraph">Vous pouvez télécharger le package ONTAP Select depuis le site de support NetApp.</block>
+  <block id="53e646b7dd5ddb95bd47f8626f05f330" category="paragraph">L'utilitaire d'administration ONTAP Select Deploy est fourni sous forme de machine virtuelle (VM) basée sur la norme Open Virtualization Format (OVF). Le fichier compressé unique porte le suffixe<block ref="f81b21fb4e12a0e6917f955a9a305553" prefix=" " category="inline-code"></block>. La VM fournit le serveur Deploy et les images d'installation pour les nœuds ONTAP Select.</block>
+  <block id="a8b083480f6b19e605e4aaa8bd3425f1" category="list-text">Accédez à <block ref="a42716fdd3c80ae75cadfb8024b65de0" category="inline-link-macro-rx"></block> à l'aide d'un navigateur web et connectez-vous.</block>
+  <block id="cc97556611cf17d7a90f16087052f93b" category="list-text">Sélectionnez *Downloads* dans le menu, puis sélectionnez *Downloads* dans le menu déroulant.</block>
+  <block id="ab0ffe542101d39137dce2c19869d545" category="list-text">Sur la page Téléchargements, sous All Products A-Z, sélectionnez la lettre *O*.</block>
+  <block id="49f3378bb78e3d9783ddf1d56b07097e" category="list-text">Sélectionnez la version souhaitée du package.</block>
+  <block id="a0ce89b8db68d7f3e4fb721f6bf6c751" category="list-text">Sélectionnez et téléchargez le package approprié, en répondant à toutes les invites si nécessaire.</block>
+  <block id="8435c401e57e043b0c57edfb0a00c774" category="section-title">Vérifiez la signature OVA de ONTAP Select Deploy</block>
+  <block id="ab07c13a31893a6c9ee2547e7b9df643" category="paragraph">Vous devez vérifier la signature de l'ONTAP Select Open Virtualization Appliance (OVA) avant d'installer le package d'installation.</block>
+  <block id="940949e444a7d7ca33644736f8b10bcd" category="list-text">Obtenez les fichiers suivants à partir de la page de téléchargement du produit sur le site d'assistance NetApp :</block>
+  <block id="134cfba28fd247854afe7ce4d31767ad" category="list-text">Vérifiez la signature avec la commande suivante :</block>
+  <block id="0ba1987cb555e519f115071e917656fc" category="section-title">Déployer la machine virtuelle</block>
+  <block id="1eadabe4e39cf3ae5ce71caf6ddc8447" category="paragraph">Vous devez installer et démarrer la machine virtuelle ONTAP Select Deploy à l'aide de l'image OVF. Dans le cadre du processus d'installation, vous configurez l'interface réseau pour utiliser DHCP ou une configuration IP statique.</block>
+  <block id="3186b86d87a207cefd5620929256fbd0" category="list-text">Sélectionnez le fichier OVA et terminez l’assistant de déploiement de modèle OVF, en sélectionnant les options appropriées pour votre environnement.</block>
+  <block id="1d7370ec51f294f5948f3cc2550b812a" category="list-text">Cliquez sur l'onglet *Console* pour accéder au shell de configuration de l'hôte ESXi et surveiller le processus de mise sous tension.</block>
+  <block id="25775c61c3281e6d412f48371102d8b3" category="section-title">Sign in à l'interface web de déploiement</block>
+  <block id="887ee30caedf2bee91979565f5ddf01e" category="paragraph">Vous devez vous connecter à l'interface utilisateur web pour confirmer que l'utilitaire Deploy est disponible et effectuer la configuration initiale.</block>
+  <block id="28258323eaa4732b0beafbc8b083a5ab" category="list-text">Si c'est votre première connexion et que vous n'avez pas installé Deploy à l'aide de l'assistant disponible avec vCenter, veuillez fournir les informations de configuration suivantes lorsque vous y êtes invité :</block>
+  <block id="0778e2d9c54386153e2e52bad4129abe" category="inline-link-macro">Sign in pour utiliser Deploy avec SSH</block>
+  <block id="ccbbd15600c60abef8f9d734d84b4a4e" category="list-text"><block ref="ccbbd15600c60abef8f9d734d84b4a4e" category="inline-link-macro-rx"></block></block>
 </blocks>
