@@ -48,7 +48,7 @@ Chaque instance du Gestionnaire de licences, et donc chaque instance de l'utilit
 Vous pouvez déterminer l'ID de verrouillage de licence pour votre instance de déploiement à l'aide de l'interface utilisateur Web des manières suivantes :
 
 * Page de démarrage : cette page s'affiche lors de votre première connexion à Deploy. Vous pouvez également l'afficher en cliquant sur le menu déroulant en haut à droite et en sélectionnant « Démarrage ». Le LLID s'affiche dans la section « Ajouter des licences ».
-* Administration Cliquez sur l'onglet *Administration* en haut de la page, puis cliquez sur *Systèmes* et *Paramètres*.
+* Administration Cliquez sur l'onglet *Administration* en haut de la page, puis cliquez sur *Systems & AutoSupport*.
 
 
 
