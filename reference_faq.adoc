@@ -250,12 +250,12 @@ Contrairement aux clusters à quatre, six et huit nœuds, où la machine virtuel
 MetroCluster SDS est une option de réplication synchrone à moindre coût, intégrée aux solutions de continuité d'activité MetroCluster de NetApp. Elle est disponible uniquement avec ONTAP Select, contrairement à NetApp MetroCluster , disponible sur FAS Hybrid Flash, AFF et NetApp Private Storage for Cloud.
 
 .En quoi le SDS MetroCluster est-il différent de NetApp MetroCluster?
-MetroCluster SDS offre une solution de réplication synchrone et s'inscrit dans la gamme des solutions NetApp MetroCluster . Cependant, les principales différences résident dans les distances prises en charge (environ 10 km contre 300 km) et le type de connectivité (seuls les réseaux IP sont pris en charge, et non les réseaux FC et IP).
+MetroCluster SDS propose une solution de réplication synchrone et fait partie des solutions NetApp MetroCluster. Cependant, une différence majeure réside dans le type de connectivité (seuls les réseaux IP sont pris en charge plutôt que FC et IP).
 
 .Quelle est la différence entre un cluster ONTAP Select à deux nœuds et un SDS ONTAP MetroCluster à deux nœuds ?
 Un cluster à deux nœuds est défini comme un cluster dont les deux nœuds se trouvent dans le même centre de données, à moins de 300 m l'un de l'autre. En général, les deux nœuds disposent de liaisons montantes vers le même commutateur réseau ou ensemble de commutateurs réseau connectés par une liaison inter-commutateurs.
 
-Le SDS MetroCluster à deux nœuds est défini comme un cluster dont les nœuds sont physiquement séparés (salles, bâtiments ou centres de données différents) et dont les connexions montantes sont connectées à des commutateurs réseau distincts. Bien que le SDS MetroCluster ne nécessite pas de matériel dédié, l'environnement doit respecter un ensemble d'exigences minimales en termes de latence (RTT de 5 ms et gigue de 5 ms pour un total maximal de 10 ms) et de distance physique (10 km).
+Le MetroCluster SDS à deux nœuds est défini comme un cluster dont les nœuds sont physiquement séparés (pièces différentes, bâtiments différents ou centres de données différents) et dont les connexions montantes de chaque nœud sont connectées à des commutateurs réseau distincts. Bien que MetroCluster SDS ne nécessite pas de matériel dédié, l’environnement doit respecter les exigences minimales de latence (5 ms RTT et 5 ms de gigue pour un total maximal de 10 ms).
 
 MetroCluster SDS est une fonctionnalité premium nécessitant une licence Premium ou Premium XL. Une licence Premium permet la création de machines virtuelles de petite et moyenne taille, ainsi que de supports HDD et SSD. Toutes ces configurations sont prises en charge.
 
@@ -274,10 +274,10 @@ Non, seuls les clusters à deux nœuds avec un médiateur peuvent être configur
 .Quelles sont les exigences pour ONTAP MetroCluster SDS ?
 Les exigences sont les suivantes :
 
-* Trois centres de données (un pour le médiateur ONTAP Select Deploy et un pour chaque nœud).
-* RTT de 5 ms et gigue de 5 ms pour un total maximal de 10 ms et une distance physique maximale de 10 km entre les nœuds ONTAP Select .
-* RTT de 125 ms et une bande passante minimale de 5 Mbps entre le médiateur de déploiement ONTAP Select et chaque nœud ONTAP Select .
-* Une licence Premium ou Premium XL.
+* Trois centres de données (un pour le ONTAP Select Deploy Mediator et un pour chaque nœud)
+* 5 ms de RTT et 5 ms de gigue pour un total maximal de 10 ms
+* 125 ms de RTT et une bande passante minimale de 5 Mbps entre le ONTAP Select Deploy Mediator et chaque nœud ONTAP Select
+* Une licence Premium ou Premium XL
 
 
 .ONTAP Select prend-il en charge vMotion ou VMware HA ?

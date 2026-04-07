@@ -26,9 +26,13 @@ La machine virtuelle ONTAP Select peut être colocalisée avec des machines virt
 
 L'utilisation ONTAP Select pour fournir des services de fichiers de niveau entreprise tout en permettant la réplication bidirectionnelle vers d'autres clusters ONTAP Select ou FAS permet de créer des solutions résilientes dans des environnements peu exigeants ou peu coûteux. ONTAP Select est fourni avec des licences pré-installées pour les services de protocoles CIFS, NFS et iSCSI, ainsi que pour les technologies de réplication SnapMirror et SnapVault . Par conséquent, toutes ces fonctionnalités sont disponibles immédiatement après le déploiement.
 
+[NOTE]
+====
+Étant donné que toutes les licences VMware vSphere sont prises en charge, vous pouvez choisir la licence vSphere Remote Office Branch Office Standard ou Advanced au lieu de la licence Enterprise ou Enterprise Plus.
 
-NOTE: Toutes les licences VMware vSphere étant prises en charge, vous pouvez choisir la licence vSphere Remote Office Branch Office Standard ou Advanced plutôt que la licence Enterprise ou Enterprise Plus. Toutes les licences vSphere et VSAN sont désormais prises en charge.
+Toutes les licences vSphere et VSAN sont prises en charge.
 
+====
 Un cluster ONTAP Select à deux nœuds avec médiateur distant constitue une solution intéressante pour les petits datacenters. Dans cette configuration, la fonctionnalité HA est assurée par ONTAP Select. La configuration réseau minimale requise pour une solution ONTAP Select ROBO à deux nœuds est de quatre liaisons de 1 Gbit/s. Une seule connexion réseau de 10 Gbit/s est également prise en charge. La solution vNAS ONTAP Select fonctionnant sur VSAN (y compris la configuration VSAN ROBO à deux nœuds) est une autre option. Dans cette configuration, la fonctionnalité HA est assurée par VSAN. Enfin, un cluster ONTAP Select à nœud unique répliquant ses données vers un emplacement central peut fournir un ensemble d'outils robustes de gestion des données d'entreprise sur un serveur standard.
 
 La figure suivante illustre une configuration courante de bureau distant utilisant ONTAP Select sur une machine virtuelle ESXi. Les relations SnapMirror planifiées répliquent périodiquement les données du bureau distant vers une baie de stockage consolidée unique située dans le centre de données principal.
