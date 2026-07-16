@@ -18,6 +18,7 @@ Vous pouvez acheter une licence ONTAP Select Capacity Tier ou Capacity Pool aux 
 
 
 
+[[what-a-platform-license-offering-provides]]
 == Ce que propose une offre de licence de plateforme
 
 Une offre de licence spécifique détermine les capacités de l'hôte hyperviseur dans deux domaines :
@@ -69,6 +70,7 @@ NOTE: Les machines virtuelles basées sur le noyau (KVM) ne prennent pas en char
 
 
 
+[[compare-hardware-support-for-platform-license-offerings]]
 == Comparer le support matériel pour les offres de licences de plateforme
 
 Les licences Standard, Premium et Premium XL prennent en charge une large gamme de matériels et de logiciels. Pour obtenir des informations à jour sur les versions matérielles et logicielles, consultez lelink:https://mysupport.netapp.com/matrix/["Outil de matrice d'interopérabilité"^] .

@@ -18,12 +18,14 @@ Il y a plusieurs choses que vous devez savoir avant d’utiliser la page de docu
 
 
 
+[[deployment-plan]]
 == Plan de déploiement
 
 Si vous prévoyez d'émettre des appels d'API dans le cadre de tâches de déploiement ou d'administration spécifiques, pensez à créer un plan de déploiement. Ce plan peut être formel ou informel et contient généralement vos objectifs et les appels d'API à utiliser. Pour plus d'informations, consultez la section Processus de workflow utilisant l'API REST Déployer.
 
 
 
+[[json-examples-and-parameter-definitions]]
 == Exemples JSON et définitions de paramètres
 
 Chaque appel d'API est décrit dans la page de documentation selon un format cohérent. Le contenu comprend des notes d'implémentation, des paramètres de requête et des codes d'état HTTP. De plus, vous pouvez afficher des détails sur le JSON utilisé avec les requêtes et réponses d'API comme suit :
@@ -34,6 +36,7 @@ Chaque appel d'API est décrit dans la page de documentation selon un format coh
 
 
 
+[[caution-when-issuing-api-calls]]
 == Attention lors de l'émission d'appels API
 
 Toutes les opérations API effectuées via la page de documentation « Déployer » sont des opérations en direct. Veillez à ne pas créer, mettre à jour ou supprimer par erreur des configurations ou d'autres données.

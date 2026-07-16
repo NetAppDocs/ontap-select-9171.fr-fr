@@ -21,6 +21,7 @@ NOTE: Les fonctionnalités ONTAP qui ont des dépendances spécifiques au matér
 
 
 
+[[ontap-features-automatically-enabled-by-default]]
 == Fonctionnalités ONTAP activées automatiquement par défaut
 
 Les fonctionnalités ONTAP suivantes sont prises en charge avec ONTAP Select et sous licence par défaut :
@@ -60,6 +61,7 @@ NOTE: ONTAP Select prend en charge SVM DR comme source et destination, avec un m
 
 
 
+[[ontap-features-that-are-separately-licensed]]
 == Fonctionnalités ONTAP sous licence séparée
 
 Vous devez acquérir une licence distincte pour toute fonctionnalité ONTAP qui n'est pas activée par défaut, notamment :

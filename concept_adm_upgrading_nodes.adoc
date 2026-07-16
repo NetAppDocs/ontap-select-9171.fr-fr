@@ -21,6 +21,7 @@ CAUTION: L'utilitaire d'administration Deploy ne permet pas de mettre à niveau 
 
 
 
+[[general-procedure]]
 == Procédure générale
 
 À un niveau élevé, vous devez utiliser les étapes suivantes pour mettre à niveau un nœud ONTAP Select existant.
@@ -39,6 +40,7 @@ Consultez les notes de version pour obtenir des informations supplémentaires et
 
 
 
+[[revert-an-ontap-select-node]]
 == Rétablir un nœud ONTAP Select
 
 Il est impossible de restaurer une version antérieure à celle d'origine d'un nœud ONTAP Select . Par exemple:
@@ -49,6 +51,7 @@ ONTAP Select 9.17.1 est installé par défaut.:: Le retour à une version antér
 
 
 
+[[use-the-vmxnet3-network-driver]]
 == Utiliser le pilote réseau VMXNET3
 
 VMXNET3 est le pilote réseau par défaut inclus dans les nouveaux déploiements de clusters sur VMware ESXi. Si vous mettez à niveau un nœud ONTAP Select existant exécutant ONTAP Select 9.4 ou une version antérieure, le pilote réseau n'est pas automatiquement mis à niveau. Vous devez effectuer la mise à niveau manuelle vers VMXNET3. Contactez le support NetApp pour obtenir de l'aide concernant la mise à niveau.

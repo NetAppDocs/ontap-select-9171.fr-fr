@@ -18,6 +18,7 @@ Il existe plusieurs tâches connexes que vous pouvez effectuer dans le cadre de 
 
 
 
+[[manage-the-capacity-tier-licenses]]
 == Gérer les licences de niveau de capacité
 
 Vous pouvez ajouter, modifier et supprimer des licences ONTAP Select Capacity Tier selon vos besoins.
@@ -33,6 +34,7 @@ Vous pouvez ajouter, modifier et supprimer des licences ONTAP Select Capacity Ti
 
 
 
+[[manage-the-capacity-pool-licenses]]
 == Gérer les licences du pool de capacité
 
 Vous pouvez ajouter, modifier et supprimer des licences ONTAP Select Capacity Pool selon vos besoins.
@@ -81,6 +83,7 @@ Pour renouveler une licence existante :
 
 
 
+[[reinstall-a-capacity-pool-license]]
 == Réinstaller une licence Capacity Pool
 
 Chaque licence Capacity Pool active est liée à une instance spécifique du Gestionnaire de licences, contenue dans une instance de l'utilitaire d'administration Deploy. Si vous utilisez une licence Capacity Pool, puis restaurez ou récupérez l'instance Deploy, la licence d'origine n'est plus valide. Vous devez générer un nouveau fichier de licence Capacity, puis l'installer sur la nouvelle instance Deploy.
@@ -145,6 +148,7 @@ Voirlink:task_lic_acquire_cp.html["Acquérir une licence Capacity Pool"] pour pl
 
 
 
+[[convert-an-evaluation-license-to-a-production-license]]
 == Convertir une licence d'évaluation en licence de production
 
 Vous pouvez mettre à niveau un cluster d'évaluation ONTAP Select pour utiliser une licence de niveau de capacité de production avec l'utilitaire d'administration Deploy.
@@ -176,6 +180,7 @@ Les numéros de série de nœuds à vingt chiffres initialement attribués à ch
 
 
 
+[[manage-an-expired-capacity-pool-license]]
 == Gérer une licence Capacity Pool expirée
 
 En général, lorsqu'une licence expire, rien ne se passe. Cependant, vous ne pouvez pas installer une autre licence, car les nœuds sont associés à la licence expirée. Tant que vous n'avez pas renouvelé la licence, vous ne devez rien faire qui puisse mettre l'agrégat hors ligne, comme un redémarrage ou un basculement. Il est recommandé d'accélérer le renouvellement de la licence.
@@ -184,6 +189,7 @@ Pour plus d'informations sur ONTAP Select et le renouvellement de licence, consu
 
 
 
+[[manage-add-on-licenses]]
 == Gérer les licences complémentaires
 
 Pour le produit ONTAP Select , les licences complémentaires sont appliquées directement dans ONTAP et ne sont pas gérées via ONTAP Select Deploy. Voirlink:https://docs.netapp.com/us-en/ontap/system-admin/manage-licenses-concept.html["Présentation de la gestion des licences (administrateurs de cluster uniquement)"^] etlink:https://docs.netapp.com/us-en/ontap/task_admin_enable_new_features.html["Activez de nouvelles fonctionnalités en ajoutant des clés de licence"^] pour plus d'informations.

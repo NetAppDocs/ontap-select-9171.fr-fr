@@ -18,6 +18,7 @@ Certains appels d'API Deploy, notamment ceux qui créent ou modifient une ressou
 
 
 
+[[asynchronous-requests-described-using-job-object]]
 == Requêtes asynchrones décrites à l'aide de l'objet Job
 
 Après un appel d'API exécuté de manière asynchrone, le code de réponse HTTP 202 indique que la requête a été validée et acceptée, mais pas encore terminée. La requête est traitée en tâche d'arrière-plan et continue de s'exécuter après la réponse HTTP initiale au client. La réponse inclut l'objet Job ancrant la requête, ainsi que son identifiant unique.
@@ -27,6 +28,7 @@ NOTE: Vous devez vous référer à la page de documentation en ligne ONTAP Selec
 
 
 
+[[query-the-job-object-associated-with-an-api-request]]
 == Interroger l'objet Job associé à une requête API
 
 L'objet Job renvoyé dans la réponse HTTP contient plusieurs propriétés. Vous pouvez interroger la propriété « state » pour déterminer si la requête a abouti. Un objet Job peut être dans l'un des états suivants :
@@ -55,6 +57,7 @@ TIP: Vous devez toujours utiliser une interrogation longue pour réduire la char
 
 
 
+[[general-procedure-for-issuing-an-asynchronous-request]]
 == Procédure générale pour émettre une requête asynchrone
 
 Vous pouvez utiliser la procédure de haut niveau suivante pour terminer un appel d’API asynchrone :

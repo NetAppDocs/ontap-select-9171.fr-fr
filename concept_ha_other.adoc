@@ -18,6 +18,7 @@ Le battement de cœur du disque haute disponibilité (HA), la boîte aux lettres
 
 
 
+[[disk-heartbeating]]
 == Battement de cœur du disque
 
 Bien que l'architecture ONTAP Select HA exploite de nombreux chemins de code utilisés par les baies FAS traditionnelles, il existe des exceptions. L'une d'elles concerne l'implémentation du heartbeating basé sur le disque, une méthode de communication non réseau utilisée par les nœuds du cluster pour empêcher l'isolation du réseau d'entraîner un comportement de split-brain. Un scénario de split-brain résulte du partitionnement du cluster, généralement causé par des pannes réseau, où chaque côté croit que l'autre est en panne et tente de s'approprier les ressources du cluster.
@@ -40,6 +41,7 @@ NOTE: L'architecture de la boîte aux lettres et la méthode de pulsation basée
 
 
 
+[[ha-mailbox-posting]]
 == Publication dans la boîte aux lettres HA
 
 L'architecture de boîte aux lettres HA utilise un modèle de publication de messages. À intervalles réguliers, les nœuds du cluster envoient des messages à tous les autres disques de boîte aux lettres du cluster, y compris le médiateur, indiquant que le nœud est opérationnel. Dans un cluster sain, à tout moment, un seul disque de boîte aux lettres sur un nœud du cluster reçoit des messages de tous les autres nœuds du cluster.
@@ -48,6 +50,7 @@ Un disque virtuel est attaché à chaque nœud du cluster Select, spécifiquemen
 
 
 
+[[ha-heartbeating]]
 == HA battements de cœur
 
 Comme avec les plateformes NetApp FAS , ONTAP Select envoie régulièrement des messages de pulsation HA via l'interconnexion HA. Au sein du cluster ONTAP Select , cette opération s'effectue via une connexion réseau TCP/IP entre les partenaires HA. De plus, les messages de pulsation sur disque sont transmis à tous les disques de boîtes aux lettres HA, y compris les disques de boîtes aux lettres médiatrices. Ces messages sont transmis toutes les quelques secondes et relus périodiquement. La fréquence d'envoi et de réception permet au cluster ONTAP Select de détecter les pannes HA en environ 15 secondes, soit le même délai que sur les plateformes FAS . Lorsque les messages de pulsation ne sont plus lus, un basculement est déclenché.
@@ -61,6 +64,7 @@ NOTE: Les pulsations du réseau sont envoyées via l'interconnexion HA au parten
 
 
 
+[[ha-failover-and-giveback]]
 == Basculement et retour HA
 
 Lors d'un basculement, le nœud survivant assume les responsabilités de service de données pour son nœud homologue en utilisant la copie locale des données de son partenaire HA. Les E/S client peuvent se poursuivre sans interruption, mais les modifications apportées à ces données doivent être répliquées avant la restitution. Notez qu'ONTAP ONTAP Select ne prend pas en charge la restitution forcée, car cela entraîne la perte des modifications stockées sur le nœud survivant.

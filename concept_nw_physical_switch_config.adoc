@@ -24,6 +24,7 @@ Le trafic réseau interne ONTAP Select s'effectue via des interfaces virtuelles 
 
 
 
+[[shared-physical-switch]]
 == Commutateur physique partagé
 
 La figure suivante illustre une configuration de commutateur possible utilisée par un nœud d'un cluster ONTAP Select multinœud. Dans cet exemple, les cartes réseau physiques utilisées par les commutateurs virtuels hébergeant les groupes de ports réseau internes et externes sont câblées au même commutateur en amont. Le trafic du commutateur est isolé grâce à des domaines de diffusion contenus dans des VLAN distincts.
@@ -40,6 +41,7 @@ NOTE: Dans cette configuration, le commutateur partagé devient un point de déf
 
 
 
+[[multiple-physical-switches]]
 == Plusieurs commutateurs physiques
 
 Lorsque la redondance est nécessaire, il est conseillé d'utiliser plusieurs commutateurs réseau physiques. La figure suivante illustre une configuration recommandée pour un nœud d'un cluster ONTAP Select multinœud. Les cartes réseau des groupes de ports internes et externes sont câblées sur des commutateurs physiques distincts, protégeant ainsi l'utilisateur d'une panne matérielle. Un canal de port virtuel est configuré entre les commutateurs pour éviter les problèmes de spanning tree.

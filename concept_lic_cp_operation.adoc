@@ -18,6 +18,7 @@ Le modèle de licence « Pools de capacité » diffère du modèle « Niveaux
 
 
 
+[[license-manager]]
 == Gestionnaire de licences
 
 Le gestionnaire de licences s'exécute comme un processus distinct dans chaque instance de l'utilitaire d'administration Deploy. Parmi les fonctionnalités offertes par LM, on trouve :
@@ -29,6 +30,7 @@ Le gestionnaire de licences s'exécute comme un processus distinct dans chaque i
 
 
 
+[[lease-characteristics]]
 == Caractéristiques du bail
 
 L'espace de stockage alloué à chaque agrégat de données sur un nœud utilisant une licence de pool de capacité doit être associé à un bail. Le nœud demande un bail de stockage et, si la capacité est disponible, le gestionnaire de licences répond par un bail. Chaque bail possède les attributs explicites ou implicites suivants :
@@ -41,6 +43,7 @@ L'espace de stockage alloué à chaque agrégat de données sur un nœud utilisa
 
 
 
+[[license-lock-id]]
 == ID de verrouillage de licence
 
 Chaque instance du Gestionnaire de licences, et donc chaque instance de l'utilitaire Deploy correspondante, est identifiée par un numéro unique de 128 bits. Ce numéro est combiné au numéro de série de la licence du pool de capacité à neuf chiffres pour verrouiller le pool sur une instance spécifique du Gestionnaire de licences (qui est en réalité une instance Deploy). Vous devez fournir ces deux valeurs sur le site de support NetApp lors de la génération du fichier de licence NetApp (NLF).
@@ -53,6 +56,7 @@ Vous pouvez déterminer l'ID de verrouillage de licence pour votre instance de d
 
 
 
+[[basic-lease-operations]]
 == Opérations de location de base
 
 Un nœud ONTAP Select doit localiser ou demander un bail de capacité valide à chaque création, extension ou modification d'un agrégat de données. Un bail obtenu lors d'une précédente requête encore valide peut être utilisé, ou un nouveau bail peut être demandé si nécessaire. Pour localiser un bail de pool de capacité, le nœud ONTAP Select suit les étapes suivantes :
@@ -68,6 +72,7 @@ Un nœud ONTAP Select doit localiser ou demander un bail de capacité valide à 
 
 
 
+[[return-storage-capacity-to-a-capacity-pool]]
 == Renvoyer la capacité de stockage à un pool de capacités
 
 La capacité de stockage est allouée à partir d'un pool de capacité selon les besoins, et chaque nouvelle requête peut réduire l'espace disponible dans le pool. La capacité de stockage est restituée au pool dans plusieurs situations, notamment :

@@ -23,6 +23,7 @@ Vous pouvez trouver des réponses aux questions fréquemment posées sur ONTAP S
 ====
 
 
+[[general]]
 == Général
 
 Il y a plusieurs questions et réponses générales.
@@ -55,6 +56,7 @@ Contactlink:mailto:ng-ses-ontap-select@netapp.com["ng-ses-ontap-select@netapp.co
 
 
 
+[[licenses-installation-upgrades-and-reverts]]
 == Licences, installation, mises à niveau et restaurations
 
 Il existe plusieurs questions et réponses concernant les licences, l'installation, les mises à niveau et les retours en arrière.
@@ -125,6 +127,7 @@ Si un abonnement Capacity Pool expire, le système vous avertit d'abord, mais ap
 
 
 
+[[storage]]
 == Stockage
 
 Il y a plusieurs questions et réponses concernant le stockage.
@@ -216,6 +219,7 @@ Vous devez installer et exécuter les composants open source CLVM et Pacemaker (
 
 
 
+[[vcenter]]
 == vCenter
 
 Il existe plusieurs questions et réponses concernant VMware vCenter.
@@ -239,6 +243,7 @@ La liste des droits vCenter requis est disponible ici :link:reference_plan_ots_
 
 
 
+[[ha-and-clusters]]
 == HA et clusters
 
 Il existe plusieurs questions et réponses concernant les paires et les clusters HA.
@@ -299,6 +304,7 @@ La séparation du trafic HA sur une infrastructure physique distincte peut empê
 
 
 
+[[mediator-service]]
 == Service de médiation
 
 Il y a plusieurs questions et réponses concernant le service de médiation.
